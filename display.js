@@ -43,7 +43,7 @@ class Display {
 			//create polygon out of all vectors of this body
 			ctx.beginPath();
 			ctx.moveTo(vertices[0].x, vertices[0].y);
-			for (let i=1; i<vertices.length; i++) {
+			for (var i=1; i<vertices.length; i++) {
 				ctx.lineTo(vertices[i].x, vertices[i].y);
 			}
 			ctx.fill();
