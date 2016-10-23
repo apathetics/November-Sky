@@ -31,7 +31,7 @@ class Game {
     var testComposite = Composite.create({
       bodies : [testBox1, testBox2, testBox3, testBox4],
       constraints : [Constraint.create({ bodyA : testBox1, bodyB : testBox2}),
-                    Constraint.create({ bodyA : testBox3, bodyB : testBox4})]
+                     Constraint.create({ bodyA : testBox3, bodyB : testBox4})]
     });
 
     /*setTimeout(function(){
