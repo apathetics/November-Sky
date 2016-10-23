@@ -22,13 +22,18 @@ class Builder {
 				(function()
 				{
 					var o = g;
+					var i = x;
+					var j = y;
 					o.on('mousedown', function()
 					{
 						o.tint = 0xFFFFFF;
+						Builder.gridCellClicked(i, j);
+
 					});
 					o.on('touchstart', function()
 					{	
 						o.tint = 0xFFFFFF;
+						Builder.gridCellClicked(i, j);
 					});
 
 				})();
@@ -108,7 +113,7 @@ class Builder {
 			for (var y=0; y<Builder.gridHeight; y++) 
 			{
 
-				if(Builder.typeSelected !== null)
+				if(Builder.grid[x][y] !== null)
 				{
 					var obj = Bodies.rectangle(20*x+500, 20*y+500, 25, 25);
 					World.add(Game.engine.world, obj);
