@@ -16,6 +16,9 @@ class Display {
 		//Create a container object called the "stage"
 		Display.stage = new PIXI.Container();
 
+		Starfield.init(2000);
+		Display.stage.addChild(Starfield.gfx);
+
 		//used to render physics objects (for now)
 		Display.physicsGraphics = new PIXI.Graphics();
 		Display.stage.addChild(Display.physicsGraphics);
@@ -46,6 +49,8 @@ class Display {
 
 		var pgfx = Display.physicsGraphics;
 
+		Starfield.update(16);
+
 		//clear screen
 		pgfx.clear();
 
@@ -55,8 +60,8 @@ class Display {
 			var vertices = part.vertices;
 
 			//TODO: custom color per part
-			pgfx.beginFill(part.color, 0.5);
-			// pgfx.lineStyle(2, part.color);
+			pgfx.beginFill(part.color, 0.6);
+			pgfx.lineStyle(1, part.color);
 
 			//create polygon out of all vectors of this part
 			pgfx.moveTo(vertices[vertices.length-1].x, vertices[vertices.length-1].y);
