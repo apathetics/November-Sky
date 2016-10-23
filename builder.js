@@ -76,23 +76,22 @@ class Builder {
 	 				var j = y;
 
 	 				Builder.invList.push(o);
-	 				o.on('mousedown', function()
-	 				{
-
-	 					o.tint = 0x03399ff;
+	 				var handler = function() {
+	 					o.tint = Game.types[j].color;
 	 					Builder.typeSelected = Game.types[j]
-
-
-	 				});
-	 				o.on('touchstart', function()
-	 				{	
-	 					o.tint = 0x03399ff;
-	 					Builder.typeSelected = Game.types[j]
-	 				});
+	 					for (var uu=0; uu<Builder.invList.length; uu++) {
+	 						var go = Builder.invList[uu];
+	 						if (o !== go)
+	 							go.tint = Game.types[uu].color;
+	 					}
+	 				};
+	 				o.on('mousedown', handler);
+	 				o.on('touchstart', handler);
+	 				handler();
 
 	 			})();
 
-	 			g.beginFill(0x4d79ff, 1);
+	 			g.beginFill(0xFFFFFF, 1);
 	 			g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
 	 			g.endFill();
 	 			g.tint = 0x676798;
@@ -100,10 +99,16 @@ class Builder {
 	 			Display.invContainer.addChild(g);
 	 		}
 	 	}
-	 	Display.invContainer.x = Display.length + 25;
+		var bw = 140;
+		var bh = 40;
+		var marginX = 16;
+		var marginY = 16;
+		var y = (28-marginY)/bh;
+
+	 	Display.invContainer.x = Display.width - Display.gridContainer.width - bw - marginX*2 - 64;
 	 	Display.invContainer.y = Display.length + 30;
 	 	Display.stage.addChild(Display.invContainer);
-	 	Display.gridContainer.x = Display.width - 525;
+	 	Display.gridContainer.x = Display.width - Display.gridContainer.width - bw - marginX*2;
 	 	Display.gridContainer.y = Display.length + 30;
 
 	 	Display.stage.addChild(Display.gridContainer);
@@ -112,9 +117,10 @@ class Builder {
 		var makeRocket_button = new PIXI.Graphics();
 		makeRocket_button.interactive = true;
 
+
 		makeRocket_button.beginFill(0xff4d4d, 1);
 		makeRocket_button.lineStyle(4, 0x9494b8, 1);
-		makeRocket_button.drawRoundedRect(Display.width-100, Display.length + 30, 75, 75, 5);
+		makeRocket_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
 		makeRocket_button.endFill();
 		makeRocket_button.on('mousedown', Builder.makeRocket);
 		makeRocket_button.on('touchstart', Builder.makeRocket);
@@ -128,7 +134,7 @@ class Builder {
 		makeShow_button.interactive = true;
 		makeShow_button.beginFill(0xffcc00,1);
 		makeShow_button.lineStyle(4, 0xc2c2d6, 1);
-		makeShow_button.drawRoundedRect(Display.width-100, Display.length + 130, 75, 75, 5);
+		makeShow_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
@@ -141,7 +147,7 @@ class Builder {
 
 		makeHide_button.beginFill(0x00b359,1);
 		makeHide_button.lineStyle(4, 0xc2c2d6, 1);
-		makeHide_button.drawRoundedRect(Display.width-100, Display.length + 230, 75, 75, 5);
+		makeHide_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
@@ -154,7 +160,7 @@ class Builder {
 
 		makeCode_button.beginFill(0x3399ff,1);
 		makeCode_button.lineStyle(4, 0xc2c2d6, 1);
-		makeCode_button.drawRoundedRect(Display.width-100, Display.length + 330, 75, 75, 5);
+		makeCode_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
 		makeCode_button.endFill();
 		makeCode_button.on('mousedown', Builder.hide);
 		makeCode_button.on('touchstart', Builder.hide);
@@ -168,7 +174,7 @@ class Builder {
 		reset_button.interactive = true;
 		reset_button.beginFill(0xaa80ff,1);
 		reset_button.lineStyle(4, 0xc2c2d6, 1);
-		reset_button.drawRoundedRect(Display.width-100, Display.length + 430, 75, 75, 5);
+		reset_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
 		reset_button.endFill();
 		reset_button.on('mousedown', Builder.reset);
 		reset_button.on('touchstart', Builder.reset);
@@ -183,6 +189,7 @@ class Builder {
 	 */
 	static show() {
 		Display.gridContainer.visible = true;
+		Display.invContainer.visible = true;
 		Editor.hide();
 		Game.state = BUILD;
 	}
@@ -192,6 +199,7 @@ class Builder {
 	 */
 	static hide() {
 		Display.gridContainer.visible = false;
+		Display.invContainer.visible = false;
 	}
 	/**
 	 * Reset the selected grids
@@ -296,7 +304,7 @@ class Builder {
 		var combined = Body.create({
 			parts: list
 		});
-		combined.color = 0xFFFF00;
+		combined.color = 0x555555;
 		var width = combined.bounds.max.x - combined.bounds.min.x;
 		var height = combined.bounds.max.y - combined.bounds.min.y;
 		Body.translate(combined, Vector.create(-Builder.gridWidth/2*SIDE_LENGTH, -Builder.gridHeight*SIDE_LENGTH));
