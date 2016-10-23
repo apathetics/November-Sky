@@ -5,11 +5,10 @@ class Builder {
 	 * Create grid cells and make clickable
 	 */
 	static init() {
-		Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
-		Builder.grid = [];
 		Builder.gridWidth = 8;
 		Builder.gridHeight = 8;
-		Builder.typeSelected = null;
+		Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
+		Builder.typeSelected = Game.types[0];
 
 		Display.gridContainer = new PIXI.Container();
 		var gridSquareSize = 64;
@@ -23,15 +22,18 @@ class Builder {
 				(function()
 				{
 					var o = g;
+					var i = x;
+					var j = y;
 					o.on('mousedown', function()
 					{
-						o.scale.x += 0.3;
-						o.scale.y += 0.3;
+						o.tint = 0xFFFFFF;
+						Builder.gridCellClicked(i, j);
+
 					});
 					o.on('touchstart', function()
 					{	
-						o.scale.x += 0.3;
-						o.scale.y += 0.3;
+						o.tint = 0xFFFFFF;
+						Builder.gridCellClicked(i, j);
 					});
 
 				})();
@@ -47,6 +49,7 @@ class Builder {
 		}
 		Display.stage.addChild(Display.gridContainer);
 		
+		//makeRocket();
 
 	}
 
@@ -70,14 +73,17 @@ class Builder {
 	 * @param h height
 	 */
 	static makeGrid(w, h) {
-		return createArray(w,h);
+
+		return createArray(w, h, null);
 	}
+
 
 	/**
 	 * Handles a click on a part type in the inventory.
 	 * Set currently selected type.
 	 */
 	static typeClicked(type) {
+
 
 	}
 
@@ -89,7 +95,7 @@ class Builder {
 	static gridCellClicked(x, y) {
 		//handles click first?
 		//click
-		Builder.grid[x][y] = click; 
+		Builder.grid[x][y] =  Builder.typeSelected;
 
 	}
 
@@ -102,5 +108,19 @@ class Builder {
 	 */
 	static makeRocket() {
 
+		for (var x=0; x<Builder.gridWidth; x++) 
+		{
+			for (var y=0; y<Builder.gridHeight; y++) 
+			{
+
+				if(Builder.grid[x][y] !== null)
+				{
+					var obj = Bodies.rectangle(20*x+500, 20*y+500, 25, 25);
+					World.add(Game.engine.world, obj);
+				}
+			}
+
+		}
 	}
+
 }
