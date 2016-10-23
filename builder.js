@@ -1,3 +1,5 @@
+var Constraint = Matter.Constraint;
+
 class Builder {
 	/**
 	 * Create pixi Container for builder interface.
@@ -14,7 +16,7 @@ class Builder {
 		var gridSquareSize = 64;
 		var margin = 8;
 
-		//make the inventory grid 
+		//make the inventory grid
 		for (var x=0; x<Builder.gridWidth; x++) {
 			for (var y=0; y<Builder.gridHeight; y++) {
 				var g = new PIXI.Graphics();
@@ -31,13 +33,13 @@ class Builder {
 
 					});
 					o.on('touchstart', function()
-					{	
+					{
 						o.tint = 0xFFFFFF;
 						Builder.gridCellClicked(i, j);
 					});
 
 				})();
-				
+
 				g.beginFill(0xFFFFFF, 1);
 				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
 				g.endFill();
@@ -48,7 +50,7 @@ class Builder {
 			}
 		}
 		Display.stage.addChild(Display.gridContainer);
-		
+
 		//makeRocket();
 
 	}
@@ -109,22 +111,37 @@ class Builder {
 	static makeRocket() {
 
 		var rocket = new Rocket();
-		for (var x=0; x<Builder.gridWidth; x++) 
-		{
-			for (var y=0; y<Builder.gridHeight; y++) 
-			{
-
-				if(Builder.grid[x][y] !== null)
-				{
+		var temp = makeGrid(Builder.gridWidth, Builder.gridHeight);
+		for (var x=0; x<Builder.gridWidth; x++){
+			for (var y=0; y<Builder.gridHeight; y++){
+				if(Builder.grid[x][y] !== null){
 					var obj = Bodies.rectangle(20*x+500, 20*y+500, 25, 25);
 					var part = new Part(obj, Builder.grid[x][y]);
+					temp[x][y] = obj;
 					rocket.add(part);
 					World.add(Game.engine.world, obj);
 				}
 			}
-
+		}
+		for(var x = 0; x < temp.length-1; x++){
+			for(var y = 0; y < temp[0].length-1; y++){
+				if(temp[x+1][y] !== null)
+					constrain(temp[x][y], temp[x+1][y]);
+				if(temp[x][y+1] !== null)
+					constrain(temp[x][y], temp[x][y+1]);
+				if(temp[x+1][y+1] !== null)
+					constrain(temp[x][y], temp[x+1][y+1]);
+			}
 		}
 		Game.rocket = rocket;
+	}
+
+	static constrain(body1, body2){
+		var newConstraint = Constraint.create({
+			bodyA: body1,
+			bodyB: body2
+		});
+		World.add(Game.engine.world, newConstraint);
 	}
 
 }

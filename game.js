@@ -19,16 +19,14 @@ class Game {
 		Game.engine = Engine.create();
 
 		//create physics bodies here
-		var testBox1 = Bodies.rectangle(100, 100, 50, 50);
-    var testBox2 = Bodies.rectangle(150, 100, 50, 50);
-    var testBox3 = Bodies.rectangle(100, 50, 50, 50);
-    var testBox4 = Bodies.rectangle(150, 50, 50, 50);
+		var testBox1 = Bodies.rectangle(100, 150, 50, 50);
+    var testBox2 = Bodies.rectangle(150, 150, 50, 50);
+    var testBox3 = Bodies.rectangle(100, 100, 50, 50);
+    var testBox4 = Bodies.rectangle(150, 100, 50, 50);
     var testBox5 = Bodies.rectangle(125, 200, 50, 50);
-    var bodyArray = [testBox1,testBox2,testBox3,testBox4,testBox5];
-    /*Game.testBody = Body.create({
-      parts : [testBox1, testBox2, testBox3, testBox4, testBox5],
-      isStatic: false
-    });*/
+    var testBox6 = Bodies.rectangle(125, 50, 50, 50);
+    var bodyArray = [testBox1,testBox2,testBox3,testBox4,testBox5, testBox6];
+
     var constraintArray = [];
     for(var i = 0; i < bodyArray.length; i++){
       for(var j = i; j >= 0; j--){
@@ -40,18 +38,12 @@ class Game {
         }));
       }
     }
+
     var testComposite = Composite.create({
-      bodies : [testBox1, testBox2, testBox3, testBox4, testBox5],
+      bodies : bodyArray,
       constraints : constraintArray
     });
-    /*[Constraint.create({ bodyA : testBox1, bodyB : testBox2}),
-                   Constraint.create({ bodyA : testBox2, bodyB : testBox4}),
-                   Constraint.create({ bodyA : testBox3, bodyB : testBox4}),
-                   Constraint.create({ bodyA : testBox1, bodyB : testBox3})]*/
 
-    /*setTimeout(function(){
-      Body.applyForce(testBody, Vector.add(testBody.position, Vector.create(0,-1)), Vector.create(.25,-.5));
-    }, 1500);*/
 		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
 
 		//add physics bodies to world
@@ -108,18 +100,8 @@ function createArray(w, h, val) {
 }
 
 //start game when resources have loaded
-window.addEventListener("load", function(){ 
-  Game.loadData(function(){ 
-    Game.init(); 
-  }); 
+window.addEventListener("load", function(){
+  Game.loadData(function(){
+    Game.init();
+  });
 }, false);
-window.addEventListener('keydown', function(event){
-  if(event.keyCode == 32)
-    Body.applyForce(Game.testBody, Vector.add(Game.testBody.position, Vector.create(0, 1)), Vector.create(0, -0.5));
-
-    if(event.keyCode == 37)
-      Body.rotate(Game.testBody, -.1);
-
-    if(event.keyCode == 39)
-      Body.rotate(Game.testBody, .1);
-});
