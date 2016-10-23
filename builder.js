@@ -278,7 +278,7 @@ class Builder {
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
-					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+200,
+					var obj = Bodies.rectangle(SIDE_LENGTH*x, SIDE_LENGTH*y,
 						SIDE_LENGTH, SIDE_LENGTH);
 					obj.color = parseInt(Builder.grid[x][y].color, 16);
 					list.push(obj);
@@ -293,6 +293,9 @@ class Builder {
 			parts: list
 		});
 		combined.color = 0xFFFF00;
+		var width = combined.bounds.max.x - combined.bounds.min.x;
+		var height = combined.bounds.max.y - combined.bounds.min.y;
+		Body.translate(combined, Vector.create(-Builder.gridWidth/2*SIDE_LENGTH, -Builder.gridHeight*SIDE_LENGTH));
 		World.add(Game.engine.world, combined);
 		rocket.mainBody = combined;
 		//check for other blocks, constrain if != null
