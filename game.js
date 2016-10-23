@@ -36,10 +36,10 @@ class Game {
     });
 
     //obstacles
-    var white = 0xFFFFFF;
-    Game.obstacles = [new Obstacle(Bodies.circle(250, 100, 30), white),
-                      new Obstacle(Bodies.circle(600, 150, 30), white),
-                      new Obstacle(Bodies.circle(950, 75, 30), white)];
+    Game.white = 0xFFFFFF;
+    Game.obstacles = [new Obstacle(Bodies.circle(250, 100, 30), Game.white),
+                      new Obstacle(Bodies.circle(600, 150, 30), Game.white),
+                      new Obstacle(Bodies.circle(950, 75, 30), Game.white)];
 
 		//add physics bodies to world
 		World.add(Game.engine.world, staticBodyArray);
@@ -59,14 +59,17 @@ class Game {
   static updateObstacles(){
     var playerPos = Game.rocket.mainBody.position;
     Game.obstacles.forEach(function(obj) {
-      if(obj.body.position.y - playerPos.y > Display.height)
-        obj.remove();
+      if(obj.body.position.y - playerPos.y > Display.height){
+        obj.destroy();
+        Game.obstacles.splice(Game.obstacles.indexOf(obj), 1);
+      }
     })
     while(Game.obstacles.length < 5){
-      var tempX = 100 + (Math.random*1000);
-      var tempY = playerPos.y + 500 + (Math.random*1000);
-      var tempR = 20+(Math.random*30);
-      Game.obstacles.push(new Obstacle(Bodies.circle(tempX,tempY,tempR)));
+      var tempX = 100 + (Math.random()*1000);
+      var tempY = playerPos.y - 500 - (Math.random()*1000);
+      var tempR = 20+(Math.random()*30);
+      console.log(tempX+"\n"+tempY+"\n"+tempR);
+      Game.obstacles.push(new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white));
     }
   }
 
