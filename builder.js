@@ -56,8 +56,8 @@ class Builder {
 			}
 		}
 
-		Display.gridContainer.x = 850;
-		Display.gridContainer.y = 25;
+		Display.gridContainer.x = Display.width - 525;
+		Display.gridContainer.y = Display.length + 30;
 
 		Display.stage.addChild(Display.gridContainer);
 
@@ -95,7 +95,7 @@ class Builder {
 				Display.invContainer.addChild(g);
 			}
 		}
-		Display.invContainer.y = 30;
+		Display.invContainer.y = Display.length + 30;
 
 		Display.stage.addChild(Display.invContainer);
 
@@ -105,7 +105,7 @@ class Builder {
 
 		makeRocket_button.beginFill(0xff4d4d, 1);
 		makeRocket_button.lineStyle(4, 0x9494b8, 1);
-		makeRocket_button.drawRoundedRect(1325, 30, 75, 75, 5);
+		makeRocket_button.drawRoundedRect(Display.width-100, Display.length + 30, 75, 75, 5);
 		makeRocket_button.endFill();
 		makeRocket_button.on('mousedown', Builder.makeRocket);
 		makeRocket_button.on('touchstart', Builder.makeRocket);
@@ -119,7 +119,7 @@ class Builder {
 		makeShow_button.interactive = true;
 		makeShow_button.beginFill(0xffcc00,1);
 		makeShow_button.lineStyle(4, 0xc2c2d6, 1);
-		makeShow_button.drawRoundedRect(1325, 130, 75, 75, 5);
+		makeShow_button.drawRoundedRect(Display.width-100, Display.length + 130, 75, 75, 5);
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
@@ -132,7 +132,7 @@ class Builder {
 
 		makeHide_button.beginFill(0x00b359,1);
 		makeHide_button.lineStyle(4, 0xc2c2d6, 1);
-		makeHide_button.drawRoundedRect(1325, 230, 75, 75, 5);
+		makeHide_button.drawRoundedRect(Display.width-100, Display.length + 230, 75, 75, 5);
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
@@ -145,7 +145,7 @@ class Builder {
 
 		makeCode_button.beginFill(0x3399ff,1);
 		makeCode_button.lineStyle(4, 0xc2c2d6, 1);
-		makeCode_button.drawRoundedRect(1325, 330, 75, 75, 5);
+		makeCode_button.drawRoundedRect(Display.width-100, Display.length + 330, 75, 75, 5);
 		makeCode_button.endFill();
 		makeCode_button.on('mousedown', Builder.hide);
 		makeCode_button.on('touchstart', Builder.hide);
