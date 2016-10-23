@@ -109,6 +109,7 @@ class Builder {
 		makeRocket_button.on('touchstart', Builder.makeRocket);
 		makeRocket_button.on('mousedown', Builder.hide);
 		makeRocket_button.on('touchstart', Builder.hide);
+		
 		Display.stage.addChild(makeRocket_button);
 
 		//make a button for show()
@@ -121,6 +122,7 @@ class Builder {
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
+		
 		Display.stage.addChild(makeShow_button);
 
 		//make a button for hide()
@@ -133,6 +135,7 @@ class Builder {
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
+	
 		Display.stage.addChild(makeHide_button);
 
 		//make a button for code()
@@ -158,6 +161,7 @@ class Builder {
 	 */
 	static show() {
 		Display.gridContainer.visible = true;
+		Editor.hide();
 		Game.state = BUILD;
 	}
 
@@ -208,6 +212,8 @@ class Builder {
 	 * Add composite to game world.
 	 */
 	static makeRocket() {
+		Editor.hide();
+
 		var SIDE_LENGTH = 25;
 		var rocket = new Rocket();
 		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
