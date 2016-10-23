@@ -4,9 +4,15 @@
 	top: 0;
 }
 #coding {
-	background: #483D8B;
+	position: absolute;
+	width: 50%;
+	margin: 0 auto;
 	visibility: hidden;
+
+	z-index: 0;
 }
 #editor {
 	font-family: monospace;
+	background-color: #473c89;
+	color: #ffffff;
 }

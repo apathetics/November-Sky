@@ -89,6 +89,21 @@ class Builder {
 		makeHide_button.on('touchstart', Builder.hide);
 		Display.stage.addChild(makeHide_button);
 
+		//make a button for code()
+		var makeCode_button = new PIXI.Graphics();
+		makeCode_button.interactive = true;
+
+		makeCode_button.beginFill(0xFfde33,1);
+		makeCode_button.lineStyle(4, 0xffd900, 1);
+		makeCode_button.drawCircle(800, 400, 60);
+		makeCode_button.endFill();
+		makeCode_button.on('mousedown', Builder.hide);
+		makeCode_button.on('touchstart', Builder.hide);
+		makeCode_button.on('mousedown', Editor.show);
+		makeCode_button.on('touchstart', Editor.show);
+
+		Display.stage.addChild(makeCode_button);
+
 
 	}
 
@@ -105,7 +120,6 @@ class Builder {
 	 */
 	static hide() {
 		Display.gridContainer.visible = false;
-		Editor.show();
 	}
 
 	/**
