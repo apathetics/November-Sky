@@ -3,3 +3,10 @@
 	left: 0;
 	top: 0;
 }
+#coding {
+	background: #483D8B;
+	visibility: hidden;
+}
+#editor {
+	font-family: monospace;
+}
