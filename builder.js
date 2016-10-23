@@ -14,17 +14,40 @@ class Builder {
 		Display.gridContainer = new PIXI.Container();
 		var gridSquareSize = 64;
 		var margin = 8;
+
+		//make the inventory grid 
 		for (var x=0; x<Builder.gridWidth; x++) {
 			for (var y=0; y<Builder.gridHeight; y++) {
 				var g = new PIXI.Graphics();
+				g.interactive = true;
+				(function()
+				{
+					var o = g;
+					o.on('mousedown', function()
+					{
+						o.scale.x += 0.3;
+						o.scale.y += 0.3;
+					});
+					o.on('touchstart', function()
+					{	
+						o.scale.x += 0.3;
+						o.scale.y += 0.3;
+					});
+
+				})();
+				
 				g.beginFill(0xFFFFFF, 1);
 				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
 				g.endFill();
 				g.tint = 0x0000FF;
+
+
 				Display.gridContainer.addChild(g);
 			}
 		}
 		Display.stage.addChild(Display.gridContainer);
+		
+
 	}
 
 	/**
