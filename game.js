@@ -4,9 +4,13 @@ var Engine = Matter.Engine,
     World = Matter.World,
     Composite = Matter.Composite,
     Constraint = Matter.Constraint,
-    Bodies = Matter.Bodies
-    Vector = Matter.Vector
+    Bodies = Matter.Bodies,
+    Vector = Matter.Vector,
     Body = Matter.Body;
+
+var PLAY = 0,
+    BUILD = 1,
+    CODE = 2;
 
 class Game {
 	static init() {
@@ -15,6 +19,7 @@ class Game {
 		Builder.init();
 		Builder.hide();
 
+    Game.state = PLAY;
 		//create physics engine
 		Game.engine = Engine.create();
 
