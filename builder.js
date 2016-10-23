@@ -270,6 +270,7 @@ class Builder {
 	 */
 	static makeRocket() {
 
+		var empty = true;
 		var SIDE_LENGTH = 25;
 		var rocket = new Rocket();
 		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
@@ -289,6 +290,8 @@ class Builder {
 				}
 			}
 		}
+		if(empty)
+			return;
 		var combined = Body.create({
 			parts: list
 		});
