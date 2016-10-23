@@ -50,7 +50,7 @@ class Builder {
 			}
 		}
 		Display.stage.addChild(Display.gridContainer);
-		
+
 		//make a button for make_rocket()
 		var makeRocket_button = new PIXI.Graphics();
 		makeRocket_button.interactive = true;
@@ -75,7 +75,7 @@ class Builder {
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
-		Display.stage.addChild(makeShow_button);		
+		Display.stage.addChild(makeShow_button);
 
 		//make a button for hide()
 		var makeHide_button = new PIXI.Graphics();
@@ -87,7 +87,7 @@ class Builder {
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
-		Display.stage.addChild(makeHide_button);		
+		Display.stage.addChild(makeHide_button);
 
 
 	}
@@ -148,7 +148,7 @@ class Builder {
 	static makeRocket() {
 
 		var rocket = new Rocket();
-		var temp = makeGrid(Builder.gridWidth, Builder.gridHeight);
+		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 		//initialize parts != null with body and type
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
@@ -164,12 +164,14 @@ class Builder {
 		//check for other blocks, constrain if != null
 		for(var x = 0; x < temp.length-1; x++){
 			for(var y = 0; y < temp[0].length-1; y++){
+				if(temp[x][y] == null)
+					continue;
 				if(temp[x+1][y] !== null)		//check right
-					constrain(temp[x][y], temp[x+1][y]);
+					Builder.constrain(temp[x][y], temp[x+1][y]);
 				if(temp[x][y+1] !== null)		//check down
-					constrain(temp[x][y], temp[x][y+1]);
+					Builder.constrain(temp[x][y], temp[x][y+1]);
 				if(temp[x+1][y+1] !== null)		//check down right diagonally
-					constrain(temp[x][y], temp[x+1][y+1]);
+					Builder.constrain(temp[x][y], temp[x+1][y+1]);
 			}
 		}
 
@@ -177,6 +179,7 @@ class Builder {
 	}
 
 	static constrain(body1, body2){
+		console.log("something");
 		var newConstraint = Constraint.create({
 			bodyA: body1,
 			bodyB: body2

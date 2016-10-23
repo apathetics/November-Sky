@@ -1,17 +1,17 @@
 class Rocket {
 	constructor() {
 		//needs container for parts
-		var partContainer = [];
+		this.partContainer = [];
 	}
 
 	add(part) {
 		//add part to a container
-		partContainer.push(part);
+		this.partContainer.push(part);
 	}
 
 	update(dTime) {
-		for(i=0; i<partContainer.length; i++) {
-			partContainer[i].update(dTime);
+		for(i=0; i<this.partContainer.length; i++) {
+			this.partContainer[i].update(dTime);
 		}
 	}
 }
