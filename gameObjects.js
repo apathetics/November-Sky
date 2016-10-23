@@ -1,10 +1,11 @@
 var Sleeping = Matter.Sleeping;
 
 class GameObject{
-  constructor(body){
+  constructor(body, color){
     this.body = body;
+    this.body.color = color;
     this.body.isFloating = true;
-    console.log(this.body.isFloating);
+    console.log(this.body.color);
   }
 
   destroy(){
@@ -19,8 +20,8 @@ class GameObject{
 }
 
 class Obstacle extends GameObject{
-  constructor(body){
-    super(body);
+  constructor(body, color){
+    super(body, color);
     console.log(this.body.isFloating);
     this.body.isSensor = false;
     this.add();
@@ -29,8 +30,8 @@ class Obstacle extends GameObject{
 }
 
 class PowerUp extends GameObject{
-  constructor(body){
-    super(body);
+  constructor(body, color){
+    super(body, color);
     this.body.isSensor = true;
     this.add();
   }
