@@ -19,20 +19,35 @@ class Game {
 		Game.engine = Engine.create();
 
 		//create physics bodies here
-		var testBox1 = Bodies.rectangle(100, 100, 64, 64);
-    var testBox2 = Bodies.rectangle(250, 100, 64, 64);
-    var testBox3 = Bodies.rectangle(80, 50, 64, 64);
-    var testBox4 = Bodies.rectangle(270, 50, 64, 64);
-    //var testBox5 = Bodies.rectangle(175, 0, 64, 64);
+		var testBox1 = Bodies.rectangle(100, 100, 50, 50);
+    var testBox2 = Bodies.rectangle(150, 100, 50, 50);
+    var testBox3 = Bodies.rectangle(100, 50, 50, 50);
+    var testBox4 = Bodies.rectangle(150, 50, 50, 50);
+    var testBox5 = Bodies.rectangle(125, 200, 50, 50);
+    var bodyArray = [testBox1,testBox2,testBox3,testBox4,testBox5];
     /*Game.testBody = Body.create({
       parts : [testBox1, testBox2, testBox3, testBox4, testBox5],
       isStatic: false
     });*/
+    var constraintArray = [];
+    for(var i = 0; i < bodyArray.length; i++){
+      for(var j = i; j >= 0; j--){
+        constraintArray.push(Constraint.create({
+          bodyA : bodyArray[i],
+          bodyB : bodyArray[j],
+          pointA : Vector.create(0,0),
+          pointB : Vector.create(0,0)
+        }));
+      }
+    }
     var testComposite = Composite.create({
-      bodies : [testBox1, testBox2, testBox3, testBox4],
-      constraints : [Constraint.create({ bodyA : testBox1, bodyB : testBox2}),
-                     Constraint.create({ bodyA : testBox3, bodyB : testBox4})]
+      bodies : [testBox1, testBox2, testBox3, testBox4, testBox5],
+      constraints : constraintArray
     });
+    /*[Constraint.create({ bodyA : testBox1, bodyB : testBox2}),
+                   Constraint.create({ bodyA : testBox2, bodyB : testBox4}),
+                   Constraint.create({ bodyA : testBox3, bodyB : testBox4}),
+                   Constraint.create({ bodyA : testBox1, bodyB : testBox3})]*/
 
     /*setTimeout(function(){
       Body.applyForce(testBody, Vector.add(testBody.position, Vector.create(0,-1)), Vector.create(.25,-.5));
