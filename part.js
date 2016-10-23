@@ -11,8 +11,13 @@ class Part {
 		//do relevant updates
 		//e.g. apply force to physics object
 
-		if(this.partType.behaviors.indexOf("thruster") >= 0) {
-			Body.applyForce(this.body, Vector.create(0,-this.partType.thrust));
+		//do not apply behaviors if there are none
+		if (!(this.partType.hasOwnProperty("behaviors")))
+			return;
+
+		//apply behaviors
+		if(this.partType.behaviors.indexOf("thrust") >= 0) {
+			Body.applyForce(this.body, Vector.create(0,0), Vector.create(0,-this.partType.thrust));
 		}
 	}
 }

@@ -2,19 +2,20 @@
 	"types": [
 		{
 			"name": "controller",
-			"color": "0xFFFFFF"
+			"color": "0x00AAFF"
 		},
 
 		{
-			"name": "booster",
-			"thrust": 100,
-			"color": "0xFFFFFF"
+			"name": "thruster",
+			"color": "0xFFAA00",
+			"behaviors": ["thrust"],
+			"thrust": 20
 		},
 		
 		{
 			"name": "fuel-tank",
-			"capacity": 100,
-			"color": "0xFFFFFF"
+			"color": "0x888888",
+			"capacity": 100
 		},
 		
 		{

@@ -34,13 +34,13 @@ class Builder {
 					var j = y;
 					o.on('mousedown', function()
 					{
-						o.tint = 0xFFFFFF;
+						o.tint = Builder.typeSelected.color;
 						Builder.gridCellClicked(i, j);
 
 					});
 					o.on('touchstart', function()
 					{
-						o.tint = 0xFFFFFF;
+						o.tint = Builder.typeSelected.color;
 						Builder.gridCellClicked(i, j);
 					});
 
@@ -49,7 +49,7 @@ class Builder {
 				g.beginFill(0xFFFFFF, 1);
 				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
 				g.endFill();
-				g.tint = 0x0000FF;
+				g.tint = 0x222222;
 
 
 				Display.gridContainer.addChild(g);
@@ -135,6 +135,21 @@ class Builder {
 		makeHide_button.on('touchstart', Builder.hide);
 		Display.stage.addChild(makeHide_button);
 
+		//make a button for code()
+		var makeCode_button = new PIXI.Graphics();
+		makeCode_button.interactive = true;
+
+		makeCode_button.beginFill(0xFfde33,1);
+		makeCode_button.lineStyle(4, 0xffd900, 1);
+		makeCode_button.drawCircle(800, 400, 60);
+		makeCode_button.endFill();
+		makeCode_button.on('mousedown', Builder.hide);
+		makeCode_button.on('touchstart', Builder.hide);
+		makeCode_button.on('mousedown', Editor.show);
+		makeCode_button.on('touchstart', Editor.show);
+
+		Display.stage.addChild(makeCode_button);
+
 
 	}
 
@@ -151,7 +166,6 @@ class Builder {
 	 */
 	static hide() {
 		Display.gridContainer.visible = false;
-		Editor.show();
 	}
 
 	/**
@@ -198,40 +212,56 @@ class Builder {
 		var rocket = new Rocket();
 		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 		//initialize parts != null with body and type
+		var list = [];
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
 					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+100,
 						SIDE_LENGTH, SIDE_LENGTH);
+					obj.color = parseInt(Builder.grid[x][y].color, 16);
+					list.push(obj);
 					var part = new Part(obj, Builder.grid[x][y]);
 					temp[x][y] = obj;
 					rocket.add(part);
-					World.add(Game.engine.world, obj); //add obj to the world
+					// World.add(Game.engine.world, obj); //add obj to the world
 				}
 			}
 		}
+		var combined = Body.create({
+			parts: list
+		});
+		combined.color = 0xFFFF00;
+		World.add(Game.engine.world, combined);
 		//check for other blocks, constrain if != null
-		for(var x = 0; x < temp.length-1; x++){
-			for(var y = 0; y < temp[0].length-1; y++){
-				if(temp[x][y] == null)
-					continue;
-				if(temp[x+1][y] !== null)		//check right
-					Builder.constrain(temp[x][y], temp[x+1][y]);
-				if(temp[x][y+1] !== null)		//check down
-					Builder.constrain(temp[x][y], temp[x][y+1]);
-				if(temp[x+1][y+1] !== null)		//check down right diagonally
-					Builder.constrain(temp[x][y], temp[x+1][y+1]);
-			}
-		}
+		// for(var x = 0; x < temp.length-1; x++){
+		// 	for(var y = 0; y < temp[0].length-1; y++){
+		// 		if(temp[x][y] == null)
+		// 			continue;
+		// 		if(temp[x+1][y] !== null) {		//check right
+		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(-SIDE_LENGTH/2,-SIDE_LENGTH/2));
+		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(SIDE_LENGTH/2,SIDE_LENGTH/2));
+		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(-SIDE_LENGTH/2,SIDE_LENGTH/2));
+		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(SIDE_LENGTH/2,-SIDE_LENGTH/2));
+		// 		}
+		// 		if(temp[x][y+1] !== null) {		//check down
+		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(-SIDE_LENGTH/2,-SIDE_LENGTH/2));
+		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(SIDE_LENGTH/2,SIDE_LENGTH/2));
+		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(-SIDE_LENGTH/2,SIDE_LENGTH/2));
+		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(SIDE_LENGTH/2,-SIDE_LENGTH/2));
+		// 		}
+		// 	}
+		// }
 
 		Game.rocket = rocket; //make rocket global
 	}
 
-	static constrain(body1, body2){
+	static constrain(body1, body2, offset){
 		console.log("something");
 		var newConstraint = Constraint.create({
 			bodyA: body1,
-			bodyB: body2
+			positionA: offset,
+			bodyB: body2,
+			positionB: offset
 		});
 		World.add(Game.engine.world, newConstraint);
 	}
