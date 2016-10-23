@@ -108,6 +108,7 @@ class Builder {
 	 */
 	static makeRocket() {
 
+		var rocket = new Rocket();
 		for (var x=0; x<Builder.gridWidth; x++) 
 		{
 			for (var y=0; y<Builder.gridHeight; y++) 
@@ -116,11 +117,14 @@ class Builder {
 				if(Builder.grid[x][y] !== null)
 				{
 					var obj = Bodies.rectangle(20*x+500, 20*y+500, 25, 25);
+					var part = new Part(obj, Builder.grid[x][y]);
+					rocket.add(part);
 					World.add(Game.engine.world, obj);
 				}
 			}
 
 		}
+		Game.rocket = rocket;
 	}
 
 }
