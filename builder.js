@@ -18,7 +18,7 @@ class Builder {
 		Display.gridContainer = new PIXI.Container();
 		Display.invContainer = new PIXI.Container();
 		var invSquareSize = 32;
-		var gridSquareSize = 64;
+		var gridSquareSize = 40;
 		var margin = 8;
 
 		//make the inventory grid
@@ -56,7 +56,8 @@ class Builder {
 			}
 		}
 
-		Display.gridContainer.x = 800;
+		Display.gridContainer.x = Display.width - 525;
+		Display.gridContainer.y = Display.length + 30;
 
 		Display.stage.addChild(Display.gridContainer);
 
@@ -76,24 +77,25 @@ class Builder {
 
 					o.on('mousedown', function()
 					{
-						o.tint = 0xFFFFFF;
+						o.tint = 0x03399ff;
 
 					});
 					o.on('touchstart', function()
 					{	
-						o.tint = 0xFFFFFF;
+						o.tint = 0x03399ff;
 					});
 
 				})();
 
-				g.beginFill(0xFFFFFF, 1);
+				g.beginFill(0x4d79ff, 1);
 				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
 				g.endFill();
-				g.tint = 0x0000FF;
+				g.tint = 0x676798;
 
 				Display.invContainer.addChild(g);
 			}
 		}
+		Display.invContainer.y = Display.length + 30;
 
 		Display.stage.addChild(Display.invContainer);
 
@@ -101,9 +103,9 @@ class Builder {
 		var makeRocket_button = new PIXI.Graphics();
 		makeRocket_button.interactive = true;
 
-		makeRocket_button.beginFill(0xFF3300,1);
-		makeRocket_button.lineStyle(4, 0xffd900, 1);
-		makeRocket_button.drawCircle(500, 100, 60);
+		makeRocket_button.beginFill(0xff4d4d, 1);
+		makeRocket_button.lineStyle(4, 0x9494b8, 1);
+		makeRocket_button.drawRoundedRect(Display.width-100, Display.length + 30, 75, 75, 5);
 		makeRocket_button.endFill();
 		makeRocket_button.on('mousedown', Builder.makeRocket);
 		makeRocket_button.on('touchstart', Builder.makeRocket);
@@ -115,10 +117,9 @@ class Builder {
 		//make a button for show()
 		var makeShow_button = new PIXI.Graphics();
 		makeShow_button.interactive = true;
-
-		makeShow_button.beginFill(0x3399ff,1);
-		makeShow_button.lineStyle(4, 0xffd900, 1);
-		makeShow_button.drawCircle(600, 200, 60);
+		makeShow_button.beginFill(0xffcc00,1);
+		makeShow_button.lineStyle(4, 0xc2c2d6, 1);
+		makeShow_button.drawRoundedRect(Display.width-100, Display.length + 130, 75, 75, 5);
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
@@ -129,9 +130,9 @@ class Builder {
 		var makeHide_button = new PIXI.Graphics();
 		makeHide_button.interactive = true;
 
-		makeHide_button.beginFill(0xcc99ff,1);
-		makeHide_button.lineStyle(4, 0xffd900, 1);
-		makeHide_button.drawCircle(700, 300, 60);
+		makeHide_button.beginFill(0x00b359,1);
+		makeHide_button.lineStyle(4, 0xc2c2d6, 1);
+		makeHide_button.drawRoundedRect(Display.width-100, Display.length + 230, 75, 75, 5);
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
@@ -142,9 +143,9 @@ class Builder {
 		var makeCode_button = new PIXI.Graphics();
 		makeCode_button.interactive = true;
 
-		makeCode_button.beginFill(0xFfde33,1);
-		makeCode_button.lineStyle(4, 0xffd900, 1);
-		makeCode_button.drawCircle(800, 400, 60);
+		makeCode_button.beginFill(0x3399ff,1);
+		makeCode_button.lineStyle(4, 0xc2c2d6, 1);
+		makeCode_button.drawRoundedRect(Display.width-100, Display.length + 330, 75, 75, 5);
 		makeCode_button.endFill();
 		makeCode_button.on('mousedown', Builder.hide);
 		makeCode_button.on('touchstart', Builder.hide);
@@ -238,6 +239,7 @@ class Builder {
 		});
 		combined.color = 0xFFFF00;
 		World.add(Game.engine.world, combined);
+		rocket.mainBody = combined;
 		//check for other blocks, constrain if != null
 		// for(var x = 0; x < temp.length-1; x++){
 		// 	for(var y = 0; y < temp[0].length-1; y++){
