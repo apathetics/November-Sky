@@ -9,7 +9,8 @@
 			"name": "thruster",
 			"color": "0xFFAA00",
 			"behaviors": ["thrust"],
-			"thrust": 0.005
+			"thrust": 0.005,
+			"gimbalRange": 0.5
 		},
 		
 		{

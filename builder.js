@@ -269,6 +269,7 @@ class Builder {
 	 */
 	static makeRocket() {
 
+		var empty = true;
 		var SIDE_LENGTH = 25;
 		var rocket = new Rocket();
 		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
@@ -277,6 +278,7 @@ class Builder {
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
+					empty = false;
 					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+200,
 						SIDE_LENGTH, SIDE_LENGTH);
 					obj.color = parseInt(Builder.grid[x][y].color, 16);
@@ -288,6 +290,8 @@ class Builder {
 				}
 			}
 		}
+		if(empty)
+			return;
 		var combined = Body.create({
 			parts: list
 		});

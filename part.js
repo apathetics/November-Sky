@@ -17,8 +17,8 @@ class Part {
 
 		//apply behaviors
 		if(this.partType.behaviors.indexOf("thrust") >= 0) {
-			var f = Vector.create(this.partType.thrust,0);
-			Body.applyForce(this.body.parent, this.body.position, Vector.rotate(f, this.body.parent.angle - Math.PI*0.5));
+			var f = Vector.create(this.partType.thrust * this.thrust,0);
+			Body.applyForce(this.body.parent, this.body.position, Vector.rotate(f, this.body.parent.angle - Math.PI*0.5 + this.gimbal * this.partType.gimbalRange));
 		}
 	}
 }
