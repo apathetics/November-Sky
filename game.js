@@ -10,7 +10,7 @@ class Game {
 		//initialize rendering
 		Display.init();
 		Builder.init();
-		Builder.show()
+		Builder.hide();
 
 		//create physics engine
 		Game.engine = Engine.create();
@@ -29,6 +29,21 @@ class Game {
 			Game.update(delta);
 			t0 = Date.now();
 			requestAnimationFrame(gameLoop);
+		});
+	}
+
+	/**
+	 * Loads resources and then calls callback.
+	 */
+	static loadData(callback) {
+		Util.load.json("data.json", function success(data){
+			Object.keys(data).forEach(function(key){
+				Game[key] = data[key];
+			});
+			callback(true);
+		}, function fail(){
+			alert("Failed to load data.");
+			callback(false);
 		});
 	}
 
@@ -54,4 +69,8 @@ function createArray(length) {
 }
 
 //start game when resources have loaded
-window.addEventListener("load", Game.init, false);
+window.addEventListener("load", function(){
+	Game.loadData(function(){
+		Game.init();
+	});
+}, false);
