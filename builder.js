@@ -196,7 +196,7 @@ class Builder {
 		reset_button.on('mousedown', Builder.reset);
 		reset_button.on('touchstart', Builder.reset);
 
-		var text = new PIXI.Text('clear',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		var text = new PIXI.Text('reset',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
 		text.position = {x: reset_button.position.x+8, y: reset_button.position.y+8};
 		Display.stage.addChild(reset_button);
 		Display.stage.addChild(text);
@@ -228,6 +228,7 @@ class Builder {
 	 	Builder.builder_grid();
 	 	Builder.inv_grid();
 	 	Builder.typeSelected = Game.types[0];
+	 	Game.reset();
 	 }
 
 	 static builder_grid()

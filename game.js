@@ -64,6 +64,11 @@ class Game {
 		World.add(Game.engine.world, staticBodyArray);
 	}
 
+	static altitude() {
+		if (Game.rocket instanceof Rocket)
+			return -Game.rocket.mainBody.position.y*0.1;
+	}
+
 	static updateObstacles(){
 		var playerPos = Game.rocket.mainBody.position;
 		Game.obstacles.forEach(function(obj) {
