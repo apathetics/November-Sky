@@ -9,10 +9,15 @@ class Builder {
 	static init() {
 		Builder.gridWidth = 8;
 		Builder.gridHeight = 8;
+		Builder.invWidth = 1;
+		Builder.invHeight = 6;
+		Builder.inv = Builder.makeGrid(Builder.invWidth, Builder.invHeight);
 		Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 		Builder.typeSelected = Game.types[0];
 
 		Display.gridContainer = new PIXI.Container();
+		Display.invContainer = new PIXI.Container();
+		var invSquareSize = 32;
 		var gridSquareSize = 64;
 		var margin = 8;
 
@@ -21,6 +26,7 @@ class Builder {
 			for (var y=0; y<Builder.gridHeight; y++) {
 				var g = new PIXI.Graphics();
 				g.interactive = true;
+
 				(function()
 				{
 					var o = g;
@@ -49,7 +55,47 @@ class Builder {
 				Display.gridContainer.addChild(g);
 			}
 		}
+
+		Display.gridContainer.x = 800;
+
 		Display.stage.addChild(Display.gridContainer);
+
+		//making the parts inventory grid
+		for (var x=0; x<Builder.invWidth; x++) 
+		{
+			for (var y=0; y<Builder.invHeight; y++) 
+			{
+				var g = new PIXI.Graphics();
+				g.interactive = true;
+
+				(function()
+				{
+					var o = g;
+					var i = x;
+					var j = y;
+
+					o.on('mousedown', function()
+					{
+						o.tint = 0xFFFFFF;
+
+					});
+					o.on('touchstart', function()
+					{	
+						o.tint = 0xFFFFFF;
+					});
+
+				})();
+
+				g.beginFill(0xFFFFFF, 1);
+				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
+				g.endFill();
+				g.tint = 0x0000FF;
+
+				Display.invContainer.addChild(g);
+			}
+		}
+
+		Display.stage.addChild(Display.invContainer);
 
 		//make a button for make_rocket()
 		var makeRocket_button = new PIXI.Graphics();
