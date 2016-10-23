@@ -62,9 +62,9 @@ class Builder {
 		Display.stage.addChild(Display.gridContainer);
 
 		//making the parts inventory grid
-		for (var x=0; x<Builder.invWidth; x++) 
+		for (var x=0; x<Builder.invWidth; x++)
 		{
-			for (var y=0; y<Builder.invHeight; y++) 
+			for (var y=0; y<Builder.invHeight; y++)
 			{
 				var g = new PIXI.Graphics();
 				g.interactive = true;
@@ -81,7 +81,7 @@ class Builder {
 
 					});
 					o.on('touchstart', function()
-					{	
+					{
 						o.tint = 0x03399ff;
 					});
 
@@ -111,7 +111,7 @@ class Builder {
 		makeRocket_button.on('touchstart', Builder.makeRocket);
 		makeRocket_button.on('mousedown', Builder.hide);
 		makeRocket_button.on('touchstart', Builder.hide);
-		
+
 		Display.stage.addChild(makeRocket_button);
 
 		//make a button for show()
@@ -123,7 +123,7 @@ class Builder {
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
-		
+
 		Display.stage.addChild(makeShow_button);
 
 		//make a button for hide()
@@ -136,7 +136,7 @@ class Builder {
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
-	
+
 		Display.stage.addChild(makeHide_button);
 
 		//make a button for code()
@@ -223,7 +223,7 @@ class Builder {
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
-					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+100,
+					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+200,
 						SIDE_LENGTH, SIDE_LENGTH);
 					obj.color = parseInt(Builder.grid[x][y].color, 16);
 					list.push(obj);

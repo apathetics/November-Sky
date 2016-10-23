@@ -7,7 +7,7 @@ class Display {
 			x: 0,
 			y: 0
 		};
-		
+
 		//Create the renderer
 		Display.renderer = PIXI.autoDetectRenderer(Display.width, Display.height, {
 			view: Display.canvas
@@ -53,7 +53,7 @@ class Display {
 		var bodies = Composite.allBodies(Game.engine.world);
 		var renderPart = function(part) {
 			var vertices = part.vertices;
-			
+
 			//TODO: custom color per part
 			// pgfx.beginFill(0xFF0000, 1);
 			pgfx.lineStyle(2, part.color);
@@ -84,7 +84,7 @@ class Display {
 			//create polygon out of all vectors of this constraint
 			pgfx.moveTo(constraint.bodyA.position.x, constraint.bodyA.position.y);
 			pgfx.lineTo(constraint.bodyB.position.x, constraint.bodyB.position.y);
-			
+
 			// pgfx.endFill();
 		});
 

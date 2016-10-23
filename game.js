@@ -21,19 +21,28 @@ class Game {
     	Editor.init();
 		Builder.hide();
 
-    	Game.state = PLAY;
+    Game.state = PLAY;
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.rocket = null;
 
 		//create physics bodies here
 		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
-		ground.color = 0xFFFFFF;
-    var obstacle = new Obstacle(Bodies.rectangle(200, 200, 50, 50));
-    obstacle.body.color = 0xFFFFFF;
+    var leftWall = Bodies.rectangle(75, 0, 40, 1200, { isStatic: true });
+    var rightWall = Bodies.rectangle(1150, 0, 40, 1200, { isStatic: true });
+    var staticBodyArray = [ground, leftWall, rightWall];
+    staticBodyArray.forEach(function(body){
+      body.color = 0xFFFFFF;
+    });
+
+    //obstacles
+    var white = 0xFFFFFF;
+    Game.obstacles = [new Obstacle(Bodies.circle(250, 100, 30), white),
+                      new Obstacle(Bodies.circle(600, 150, 30), white),
+                      new Obstacle(Bodies.circle(950, 75, 30), white)];
 
 		//add physics bodies to world
-		World.add(Game.engine.world, [ground]);
+		World.add(Game.engine.world, staticBodyArray);
 
 		//start game loop
 		var t0 = Date.now();
@@ -46,6 +55,20 @@ class Game {
 			requestAnimationFrame(gameLoop);
 		});
 	}
+
+  static updateObstacles(){
+    var playerPos = Game.rocket.mainBody.position;
+    Game.obstacles.forEach(function(obj) {
+      if(obj.body.position.y - playerPos.y > Display.height)
+        obj.remove();
+    })
+    while(Game.obstacles.length < 5){
+      var tempX = 100 + (Math.random*1000);
+      var tempY = playerPos.y + 500 + (Math.random*1000);
+      var tempR = 20+(Math.random*30);
+      Game.obstacles.push(new Obstacle(Bodies.circle(tempX,tempY,tempR)));
+    }
+  }
 
 	/**
 	 * Loads resources and then calls callback.
@@ -71,11 +94,13 @@ class Game {
 			var midY = (aabb.max.y + aabb.min.y) / 2;
 			Display.view.x = midX - Display.width / 2;
 			Display.view.y = midY - Display.height / 2;
+      Game.updateObstacles();
 		}
 		else {
 			Display.view.x = 0;
 			Display.view.y = 0;
 		}
+
 
 		//step physics
 		Engine.update(Game.engine);
