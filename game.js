@@ -25,13 +25,13 @@ class Game {
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.rocket = null;
-		
+
 
 		//create physics bodies here
-		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
-    var leftWall = Bodies.rectangle(75, 0, 40, 1200, { isStatic: true });
-    var rightWall = Bodies.rectangle(1150, 0, 40, 1200, { isStatic: true });
-    var staticBodyArray = [ground, leftWall, rightWall];
+		var ground = Bodies.rectangle(Display.width-700, Display.length+781, 1500, 60, { isStatic: true });
+    	var leftWall = Bodies.rectangle(Display.width-1419, Display.length+250, 40, 1000, { isStatic: true });
+    	var rightWall = Bodies.rectangle(Display.width-21, Display.length+250, 40, 1000, { isStatic: true });
+    	var staticBodyArray = [ground, leftWall, rightWall];
     staticBodyArray.forEach(function(body){
       body.color = 0xFFFFFF;
     });
@@ -69,8 +69,10 @@ class Game {
       var tempX = 100 + (Math.random()*1000);
       var tempY = playerPos.y - 500 - (Math.random()*1000);
       var tempR = 20+(Math.random()*30);
-      console.log(tempX+"\n"+tempY+"\n"+tempR);
-      Game.obstacles.push(new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white));
+      console.log("X: "+tempX+"\nY: "+tempY+"\nR: "+tempR+"\n");
+      var newCircle = new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white);
+      Body.setDensity(newCircle, .002);
+      Game.obstacles.push(newCircle);
     }
   }
 

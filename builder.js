@@ -100,6 +100,7 @@ class Builder {
 	 			Display.invContainer.addChild(g);
 	 		}
 	 	}
+	 	Display.invContainer.x = Display.length + 25;
 	 	Display.invContainer.y = Display.length + 30;
 	 	Display.stage.addChild(Display.invContainer);
 	 	Display.gridContainer.x = Display.width - 525;
