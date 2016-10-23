@@ -8,6 +8,7 @@ var Engine = Matter.Engine,
     Vector = Matter.Vector
     Body = Matter.Body;
 
+var GAME_FPS = 60;
 class Game {
 	static init() {
 		//initialize rendering
@@ -17,9 +18,11 @@ class Game {
 
 		//create physics engine
 		Game.engine = Engine.create();
+		Game.rocket = null;
 
 		//create physics bodies here
 		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
+		ground.color = 0xFFFFFF;
 
 		//add physics bodies to world
 		World.add(Game.engine.world, [ground]);
@@ -30,7 +33,7 @@ class Game {
 			var delta = (Date.now() - t0);
 			if (delta > 1000)
 				return;
-			Game.update(delta);
+			Game.update(delta/(1000/GAME_FPS));
 			t0 = Date.now();
 			requestAnimationFrame(gameLoop);
 		});
@@ -52,8 +55,13 @@ class Game {
 	}
 
 	static update(timeDelta) {
+		//update rocket
+		if (Game.rocket instanceof Rocket) {
+			Game.rocket.update(timeDelta);
+		}
+
 		//step physics
-		Engine.update(Game.engine, timeDelta);
+		Engine.update(Game.engine);
 
 		//draw
 		Display.frame();
