@@ -48,14 +48,28 @@ class Display {
 			var vertices = body.vertices;
 			
 			//TODO: custom color per body
-			pgfx.beginFill(0xFF0000, 1);
+			// pgfx.beginFill(0xFF0000, 1);
+			pgfx.lineStyle(2, 0xFF0000);
 
 			//create polygon out of all vectors of this body
-			pgfx.moveTo(vertices[0].x, vertices[0].y);
-			for (var i=1; i<vertices.length; i++) {
+			pgfx.moveTo(vertices[vertices.length-1].x, vertices[vertices.length-1].y);
+			for (var i=0; i<vertices.length; i++) {
 				pgfx.lineTo(vertices[i].x, vertices[i].y);
 			}
-			pgfx.endFill();
+			// pgfx.endFill();
+		});
+
+		var constraints = Composite.allConstraints(Game.engine.world);
+		constraints.forEach(function(constraint) {
+			//TODO: custom color per constraint
+			// pgfx.beginFill(0xFF0000, 1);
+			pgfx.lineStyle(2, 0x00FF00);
+
+			//create polygon out of all vectors of this constraint
+			pgfx.moveTo(constraint.bodyA.position.x, constraint.bodyA.position.y);
+			pgfx.lineTo(constraint.bodyB.position.x, constraint.bodyB.position.y);
+			
+			// pgfx.endFill();
 		});
 
 		Display.renderer.render(Display.stage);

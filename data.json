@@ -1,0 +1,29 @@
+{
+	"types": [
+		{
+			"name": "controller"
+		},
+
+		{
+			"name": "booster",
+			"thrust": 100
+		},
+		
+		{
+			"name": "fuel-tank",
+			"capacity": 100
+		},
+		
+		{
+			"name": "hull-piece"
+		},
+		
+		{
+			"name": "nose"
+		},
+		
+		{
+			"name": "fin"
+		}
+	]
+}
