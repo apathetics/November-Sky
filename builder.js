@@ -76,23 +76,22 @@ class Builder {
 	 				var j = y;
 
 	 				Builder.invList.push(o);
-	 				o.on('mousedown', function()
-	 				{
-
-	 					o.tint = 0x03399ff;
+	 				var handler = function() {
+	 					o.tint = Game.types[j].color;
 	 					Builder.typeSelected = Game.types[j]
-
-
-	 				});
-	 				o.on('touchstart', function()
-	 				{	
-	 					o.tint = 0x03399ff;
-	 					Builder.typeSelected = Game.types[j]
-	 				});
+	 					for (var uu=0; uu<Builder.invList.length; uu++) {
+	 						var go = Builder.invList[uu];
+	 						if (o !== go)
+	 							go.tint = Game.types[uu].color;
+	 					}
+	 				};
+	 				o.on('mousedown', handler);
+	 				o.on('touchstart', handler);
+	 				handler();
 
 	 			})();
 
-	 			g.beginFill(0x4d79ff, 1);
+	 			g.beginFill(0xFFFFFF, 1);
 	 			g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
 	 			g.endFill();
 	 			g.tint = 0x676798;
@@ -100,10 +99,16 @@ class Builder {
 	 			Display.invContainer.addChild(g);
 	 		}
 	 	}
-	 	Display.invContainer.x = Display.length + 25;
+		var bw = 140;
+		var bh = 40;
+		var marginX = 16;
+		var marginY = 16;
+		var y = (28-marginY)/bh;
+
+	 	Display.invContainer.x = Display.width - Display.gridContainer.width - bw - marginX*2 - 64;
 	 	Display.invContainer.y = Display.length + 30;
 	 	Display.stage.addChild(Display.invContainer);
-	 	Display.gridContainer.x = Display.width - 525;
+	 	Display.gridContainer.x = Display.width - Display.gridContainer.width - bw - marginX*2;
 	 	Display.gridContainer.y = Display.length + 30;
 
 	 	Display.stage.addChild(Display.gridContainer);
@@ -112,28 +117,37 @@ class Builder {
 		var makeRocket_button = new PIXI.Graphics();
 		makeRocket_button.interactive = true;
 
+
 		makeRocket_button.beginFill(0xff4d4d, 1);
 		makeRocket_button.lineStyle(4, 0x9494b8, 1);
-		makeRocket_button.drawRoundedRect(Display.width-100, Display.length + 30, 75, 75, 5);
+		makeRocket_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeRocket_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeRocket_button.endFill();
 		makeRocket_button.on('mousedown', Builder.makeRocket);
 		makeRocket_button.on('touchstart', Builder.makeRocket);
 		makeRocket_button.on('mousedown', Builder.hide);
 		makeRocket_button.on('touchstart', Builder.hide);
 
+		var text = new PIXI.Text('launch',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeRocket_button.position.x+8, y: makeRocket_button.position.y+8};
 		Display.stage.addChild(makeRocket_button);
+		Display.stage.addChild(text);
 
 		//make a button for show()
 		var makeShow_button = new PIXI.Graphics();
 		makeShow_button.interactive = true;
 		makeShow_button.beginFill(0xffcc00,1);
 		makeShow_button.lineStyle(4, 0xc2c2d6, 1);
-		makeShow_button.drawRoundedRect(Display.width-100, Display.length + 130, 75, 75, 5);
+		makeShow_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeShow_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
 
+		var text = new PIXI.Text('build',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeShow_button.position.x+8, y: makeShow_button.position.y+8};
 		Display.stage.addChild(makeShow_button);
+		Display.stage.addChild(text);
 
 		//make a button for hide()
 		var makeHide_button = new PIXI.Graphics();
@@ -141,12 +155,16 @@ class Builder {
 
 		makeHide_button.beginFill(0x00b359,1);
 		makeHide_button.lineStyle(4, 0xc2c2d6, 1);
-		makeHide_button.drawRoundedRect(Display.width-100, Display.length + 230, 75, 75, 5);
+		makeHide_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeHide_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
 
+		var text = new PIXI.Text('close',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeHide_button.position.x+8, y: makeHide_button.position.y+8};
 		Display.stage.addChild(makeHide_button);
+		Display.stage.addChild(text);
 
 		//make a button for code()
 		var makeCode_button = new PIXI.Graphics();
@@ -154,26 +172,34 @@ class Builder {
 
 		makeCode_button.beginFill(0x3399ff,1);
 		makeCode_button.lineStyle(4, 0xc2c2d6, 1);
-		makeCode_button.drawRoundedRect(Display.width-100, Display.length + 330, 75, 75, 5);
+		makeCode_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeCode_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeCode_button.endFill();
 		makeCode_button.on('mousedown', Builder.hide);
 		makeCode_button.on('touchstart', Builder.hide);
 		makeCode_button.on('mousedown', Editor.show);
 		makeCode_button.on('touchstart', Editor.show);
 
+		var text = new PIXI.Text('program',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeCode_button.position.x+8, y: makeCode_button.position.y+8};
 		Display.stage.addChild(makeCode_button);
+		Display.stage.addChild(text);
 
 		//make a button for reset()
 		var reset_button = new PIXI.Graphics();
 		reset_button.interactive = true;
 		reset_button.beginFill(0xaa80ff,1);
 		reset_button.lineStyle(4, 0xc2c2d6, 1);
-		reset_button.drawRoundedRect(Display.width-100, Display.length + 430, 75, 75, 5);
+		reset_button.drawRoundedRect(0, 0, bw, bh, 5);
+		reset_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		reset_button.endFill();
 		reset_button.on('mousedown', Builder.reset);
 		reset_button.on('touchstart', Builder.reset);
 
+		var text = new PIXI.Text('reset',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: reset_button.position.x+8, y: reset_button.position.y+8};
 		Display.stage.addChild(reset_button);
+		Display.stage.addChild(text);
 
 
 	}
@@ -183,6 +209,7 @@ class Builder {
 	 */
 	static show() {
 		Display.gridContainer.visible = true;
+		Display.invContainer.visible = true;
 		Editor.hide();
 		Game.state = BUILD;
 	}
@@ -192,6 +219,7 @@ class Builder {
 	 */
 	static hide() {
 		Display.gridContainer.visible = false;
+		Display.invContainer.visible = false;
 	}
 	/**
 	 * Reset the selected grids
@@ -200,6 +228,7 @@ class Builder {
 	 	Builder.builder_grid();
 	 	Builder.inv_grid();
 	 	Builder.typeSelected = Game.types[0];
+	 	Game.reset();
 	 }
 
 	 static builder_grid()
@@ -280,7 +309,7 @@ class Builder {
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
 					empty = false;
-					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+200,
+					var obj = Bodies.rectangle(SIDE_LENGTH*x, SIDE_LENGTH*y,
 						SIDE_LENGTH, SIDE_LENGTH);
 					obj.color = parseInt(Builder.grid[x][y].color, 16);
 					list.push(obj);
@@ -296,7 +325,10 @@ class Builder {
 		var combined = Body.create({
 			parts: list
 		});
-		combined.color = 0xFFFF00;
+		combined.color = 0x555555;
+		var width = combined.bounds.max.x - combined.bounds.min.x;
+		var height = combined.bounds.max.y - combined.bounds.min.y;
+		Body.translate(combined, Vector.create(-Builder.gridWidth/2*SIDE_LENGTH, -Builder.gridHeight*SIDE_LENGTH));
 		World.add(Game.engine.world, combined);
 		rocket.mainBody = combined;
 		//check for other blocks, constrain if != null

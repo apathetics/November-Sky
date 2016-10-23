@@ -3,6 +3,9 @@
 	left: 0;
 	top: 0;
 }
+html,body{
+	box-sizing: border-box;
+}
 #coding {
 	position: absolute;
 	top: 0;
@@ -19,8 +22,8 @@
 	font-family: monospace;
 	background-color: #000000;
 	position: absolute;
-	right: 0;
-	bottom: 143px;
+	right: 16px;
+	bottom: 16px;
 	z-index: 100;
 	color: white;
 	padding: 25px 25px;
@@ -31,8 +34,8 @@
 	font-family: monospace;
 	background-color: #000000;
 	position: absolute;
-	right: 0;
-	bottom: 50px;
+	right: 100px;
+	bottom: 16px;
 	z-index: 100;
 	color: white;
 	padding: 25px 25px;
@@ -41,7 +44,7 @@
 
 #editor {
 	position: absolute;
-	top: 450px;
+	top: 400px;
 	bottom: 0;
 	width: 100%;
 	font-size: 20px;	
