@@ -59,7 +59,7 @@ class Game {
   static updateObstacles(){
     var playerPos = Game.rocket.mainBody.position;
     Game.obstacles.forEach(function(obj) {
-      if(obj.body.position.y - playerPos.y > Display.height){
+      if(obj.body.position.y - playerPos.y > Display.height || obj.body.position.y + playerPos.y < 5*playerPos.y){
         obj.destroy();
         Game.obstacles.splice(Game.obstacles.indexOf(obj), 1);
       }
