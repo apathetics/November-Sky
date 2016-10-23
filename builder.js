@@ -146,14 +146,15 @@ class Builder {
 	 * Add composite to game world.
 	 */
 	static makeRocket() {
-
+		var SIDE_LENGTH = 25;
 		var rocket = new Rocket();
 		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 		//initialize parts != null with body and type
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
-					var obj = Bodies.rectangle(20*x+500, 20*y+500, 25, 25);
+					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+100,
+						SIDE_LENGTH, SIDE_LENGTH);
 					var part = new Part(obj, Builder.grid[x][y]);
 					temp[x][y] = obj;
 					rocket.add(part);

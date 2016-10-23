@@ -19,35 +19,10 @@ class Game {
 		Game.engine = Engine.create();
 
 		//create physics bodies here
-		var testBox1 = Bodies.rectangle(100, 150, 50, 50);
-    var testBox2 = Bodies.rectangle(150, 150, 50, 50);
-    var testBox3 = Bodies.rectangle(100, 100, 50, 50);
-    var testBox4 = Bodies.rectangle(150, 100, 50, 50);
-    var testBox5 = Bodies.rectangle(125, 200, 50, 50);
-    var testBox6 = Bodies.rectangle(125, 50, 50, 50);
-    var bodyArray = [testBox1,testBox2,testBox3,testBox4,testBox5, testBox6];
-
-    var constraintArray = [];
-    for(var i = 0; i < bodyArray.length; i++){
-      for(var j = i; j >= 0; j--){
-        constraintArray.push(Constraint.create({
-          bodyA : bodyArray[i],
-          bodyB : bodyArray[j],
-          pointA : Vector.create(0,0),
-          pointB : Vector.create(0,0)
-        }));
-      }
-    }
-
-    var testComposite = Composite.create({
-      bodies : bodyArray,
-      constraints : constraintArray
-    });
-
 		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
 
 		//add physics bodies to world
-		World.add(Game.engine.world, [testComposite, ground]);
+		World.add(Game.engine.world, [ground]);
 
 		//start game loop
 		var t0 = Date.now();
