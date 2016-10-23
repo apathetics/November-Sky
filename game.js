@@ -17,6 +17,7 @@ class Game {
 		//initialize rendering
 		Display.init();
 		Builder.init();
+    Editor.init();
 		Builder.hide();
 
     Game.state = PLAY;
