@@ -50,8 +50,45 @@ class Builder {
 			}
 		}
 		Display.stage.addChild(Display.gridContainer);
+		
+		//make a button for make_rocket()
+		var makeRocket_button = new PIXI.Graphics();
+		makeRocket_button.interactive = true;
 
-		//makeRocket();
+		makeRocket_button.beginFill(0xFF3300,1);
+		makeRocket_button.lineStyle(4, 0xffd900, 1);
+		makeRocket_button.drawCircle(500, 100, 60);
+		makeRocket_button.endFill();
+		makeRocket_button.on('mousedown', Builder.makeRocket);
+		makeRocket_button.on('touchstart', Builder.makeRocket);
+		makeRocket_button.on('mousedown', Builder.hide);
+		makeRocket_button.on('touchstart', Builder.hide);
+		Display.stage.addChild(makeRocket_button);
+
+		//make a button for show()
+		var makeShow_button = new PIXI.Graphics();
+		makeShow_button.interactive = true;
+
+		makeShow_button.beginFill(0x3399ff,1);
+		makeShow_button.lineStyle(4, 0xffd900, 1);
+		makeShow_button.drawCircle(600, 200, 60);
+		makeShow_button.endFill();
+		makeShow_button.on('mousedown', Builder.show);
+		makeShow_button.on('touchstart', Builder.show);
+		Display.stage.addChild(makeShow_button);		
+
+		//make a button for hide()
+		var makeHide_button = new PIXI.Graphics();
+		makeHide_button.interactive = true;
+
+		makeHide_button.beginFill(0xcc99ff,1);
+		makeHide_button.lineStyle(4, 0xffd900, 1);
+		makeHide_button.drawCircle(700, 300, 60);
+		makeHide_button.endFill();
+		makeHide_button.on('mousedown', Builder.hide);
+		makeHide_button.on('touchstart', Builder.hide);
+		Display.stage.addChild(makeHide_button);		
+
 
 	}
 
