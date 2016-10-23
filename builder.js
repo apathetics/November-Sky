@@ -112,28 +112,31 @@ class Builder {
 
 		var rocket = new Rocket();
 		var temp = makeGrid(Builder.gridWidth, Builder.gridHeight);
+		//initialize parts != null with body and type
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
-				if(Builder.grid[x][y] !== null){
+				if(Builder.grid[x][y] !== null){	//if partType != null
 					var obj = Bodies.rectangle(20*x+500, 20*y+500, 25, 25);
 					var part = new Part(obj, Builder.grid[x][y]);
 					temp[x][y] = obj;
 					rocket.add(part);
-					World.add(Game.engine.world, obj);
+					World.add(Game.engine.world, obj); //add obj to the world
 				}
 			}
 		}
+		//check for other blocks, constrain if != null
 		for(var x = 0; x < temp.length-1; x++){
 			for(var y = 0; y < temp[0].length-1; y++){
-				if(temp[x+1][y] !== null)
+				if(temp[x+1][y] !== null)		//check right
 					constrain(temp[x][y], temp[x+1][y]);
-				if(temp[x][y+1] !== null)
+				if(temp[x][y+1] !== null)		//check down
 					constrain(temp[x][y], temp[x][y+1]);
-				if(temp[x+1][y+1] !== null)
+				if(temp[x+1][y+1] !== null)		//check down right diagonally
 					constrain(temp[x][y], temp[x+1][y+1]);
 			}
 		}
-		Game.rocket = rocket;
+
+		Game.rocket = rocket; //make rocket global
 	}
 
 	static constrain(body1, body2){
