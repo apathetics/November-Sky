@@ -19,6 +19,14 @@
 
 </div>
 <div id="coding">
+	<h1 style="color:white; font-family: monospace;">Usable data</h1>
+	<ul style="color:white; font-family: monospace;">
+		<li>controls.thrust (value from (0, 100)%)</li>
+		<li>controls.gimbal (value from (-1.0, 1.0))</li>
+		<li>sensors.altitude (current vertical y position)</li>
+		<li>sensors.position (current horizontal x position (-1.0, 1.0)</li>
+		<li>sensors.angle (current angle in radians; vertical is 0, left is negative, right is positive)</li>
+	</ul>
 	<button type="button" onclick="Editor.parse_text(Editor.text_area.value)" id="submit">Submit</button>
 	<button type="button" onclick="Editor.hide()" id="done">Done</button>
 	<textarea id="editor"></textarea>
