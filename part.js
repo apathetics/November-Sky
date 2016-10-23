@@ -17,7 +17,8 @@ class Part {
 
 		//apply behaviors
 		if(this.partType.behaviors.indexOf("thrust") >= 0) {
-			Body.applyForce(this.body, Vector.create(0,0), Vector.create(0,-this.partType.thrust));
+			var f = Vector.create(this.partType.thrust,0);
+			Body.applyForce(this.body.parent, this.body.position, Vector.rotate(f, this.body.parent.angle - Math.PI*0.5));
 		}
 	}
 }

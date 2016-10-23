@@ -9,7 +9,7 @@
 			"name": "thruster",
 			"color": "0xFFAA00",
 			"behaviors": ["thrust"],
-			"thrust": 20
+			"thrust": 0.005
 		},
 		
 		{
