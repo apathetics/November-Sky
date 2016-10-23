@@ -55,15 +55,15 @@ class Display {
 			var vertices = part.vertices;
 
 			//TODO: custom color per part
-			// pgfx.beginFill(0xFF0000, 1);
-			pgfx.lineStyle(2, part.color);
+			pgfx.beginFill(part.color, 0.5);
+			// pgfx.lineStyle(2, part.color);
 
 			//create polygon out of all vectors of this part
 			pgfx.moveTo(vertices[vertices.length-1].x, vertices[vertices.length-1].y);
 			for (var i=0; i<vertices.length; i++) {
 				pgfx.lineTo(vertices[i].x, vertices[i].y);
 			}
-			// pgfx.endFill();
+			pgfx.endFill();
 		}
 		bodies.forEach(function(body) {
 			if (body.parts.length > 1) {

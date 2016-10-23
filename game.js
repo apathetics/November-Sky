@@ -31,9 +31,9 @@ class Game {
     Game.white = 0xFFFFFF;
 		//create physics bodies here
 		var ground = Bodies.rectangle(0, 30, 1500, 60, { isStatic: true });
-    var leftWall = Bodies.rectangle(-500, 0, 40, 1000, { isStatic: true });
-    var rightWall = Bodies.rectangle(500, 0, 40, 1000, { isStatic: true });
-    var staticBodyArray = [ground, leftWall, rightWall];
+    Game.leftWall = Bodies.rectangle(-500, 0, 40, 1000, { isStatic: true });
+    Game.rightWall = Bodies.rectangle(500, 0, 40, 1000, { isStatic: true });
+    var staticBodyArray = [ground, Game.leftWall, Game.rightWall];
     staticBodyArray.forEach(function(body){
       body.color = Game.white;
     });
@@ -101,13 +101,12 @@ class Game {
 			var midY = (aabb.max.y + aabb.min.y) / 2;
 			Display.view.x = midX - Display.width / 2;
 			Display.view.y = midY - Display.height / 2;
-      Game.updateObstacles();
+      		Game.updateObstacles();
 		}
 		else {
 			Display.view.x = -Display.width/2;
 			Display.view.y = -Display.height+50;
 		}
-
 
 		//step physics
 		Engine.update(Game.engine);
