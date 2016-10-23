@@ -268,7 +268,6 @@ class Builder {
 	 * Add composite to game world.
 	 */
 	static makeRocket() {
-		Editor.hide();
 
 		var SIDE_LENGTH = 25;
 		var rocket = new Rocket();
