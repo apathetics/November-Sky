@@ -37,13 +37,6 @@ class Builder {
 	 				var j = y;
 
 	 				Builder.builderList.push(o);
-		//making the parts inventory grid
-		for (var x=0; x<Builder.invWidth; x++)
-		{
-			for (var y=0; y<Builder.invHeight; y++)
-			{
-				var g = new PIXI.Graphics();
-				g.interactive = true;
 
 	 				o.on('mousedown', function()
 	 				{
