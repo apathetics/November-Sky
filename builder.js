@@ -9,6 +9,8 @@ class Builder {
 		this.gridWidth = 8;
 		this.gridHeight = 8;
 		this.typeSelected = null;
+
+
 	}
 
 	/**
@@ -31,7 +33,7 @@ class Builder {
 	 * @param h height
 	 */
 	static makeGrid(w, h) {
-
+		
 	}
 
 	/**
@@ -59,6 +61,6 @@ class Builder {
 	 * Add composite to game world.
 	 */
 	static makeRocket() {
-		
+
 	}
 }

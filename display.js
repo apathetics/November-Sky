@@ -3,7 +3,18 @@ class Display {
 		//create a canvas and context
 		Display.canvas = document.createElement("canvas");
 		Display.resize();
-		Display.ctx = Display.canvas.getContext("2d");
+		
+		//Create the renderer
+		Display.renderer = PIXI.autoDetectRenderer(Display.width, Display.height, {
+			view: Display.canvas
+		});
+
+		//Create a container object called the "stage"
+		Display.stage = new PIXI.Container();
+
+		//used to render physics objects (for now)
+		Display.physicsGraphics = new PIXI.Graphics();
+		Display.stage.addChild(Display.physicsGraphics);
 
 		//add canvas to the document
 		document.getElementById("container").appendChild(Display.canvas);
@@ -26,29 +37,27 @@ class Display {
 	 * Displays the game.
 	 */
 	static frame() {
-		var ctx = Display.ctx;
+		var pgfx = Display.physicsGraphics;
 
 		//clear screen
-		ctx.fillStyle = "black";
-		ctx.fillRect(0,0,Display.width,Display.height);
+		pgfx.clear();
 
 		//iterate through all physics bodies
 		var bodies = Composite.allBodies(Game.engine.world);
 		bodies.forEach(function(body) {
 			var vertices = body.vertices;
 			
-			ctx.save();
-			ctx.fillStyle = "red";
+			//TODO: custom color per body
+			pgfx.beginFill(0xFF0000, 1);
 
 			//create polygon out of all vectors of this body
-			ctx.beginPath();
-			ctx.moveTo(vertices[0].x, vertices[0].y);
+			pgfx.moveTo(vertices[0].x, vertices[0].y);
 			for (var i=1; i<vertices.length; i++) {
-				ctx.lineTo(vertices[i].x, vertices[i].y);
+				pgfx.lineTo(vertices[i].x, vertices[i].y);
 			}
-			ctx.fill();
-
-			ctx.restore();
+			pgfx.endFill();
 		});
+
+		Display.renderer.render(Display.stage);
 	}
 }
