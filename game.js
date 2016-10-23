@@ -18,10 +18,10 @@ class Game {
 		//initialize rendering
 		Display.init();
 		Builder.init();
-    Editor.init();
+    	Editor.init();
 		Builder.hide();
 
-    Game.state = PLAY;
+    	Game.state = PLAY;
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.rocket = null;
@@ -64,6 +64,15 @@ class Game {
 		//update rocket
 		if (Game.rocket instanceof Rocket) {
 			Game.rocket.update(timeDelta);
+			var aabb = Game.rocket.mainBody.bounds;
+			var midX = (aabb.max.x + aabb.min.x) / 2;
+			var midY = (aabb.max.y + aabb.min.y) / 2;
+			Display.view.x = midX - Display.width / 2;
+			Display.view.y = midY - Display.height / 2;
+		}
+		else {
+			Display.view.x = 0;
+			Display.view.y = 0;
 		}
 
 		//step physics

@@ -239,6 +239,7 @@ class Builder {
 		});
 		combined.color = 0xFFFF00;
 		World.add(Game.engine.world, combined);
+		rocket.mainBody = combined;
 		//check for other blocks, constrain if != null
 		// for(var x = 0; x < temp.length-1; x++){
 		// 	for(var y = 0; y < temp[0].length-1; y++){
