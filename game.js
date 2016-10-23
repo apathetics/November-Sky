@@ -30,6 +30,8 @@ class Game {
 		//create physics bodies here
 		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
 		ground.color = 0xFFFFFF;
+    var obstacle = new Obstacle(Bodies.rectangle(200, 200, 50, 50));
+    obstacle.body.color = 0xFFFFFF;
 
 		//add physics bodies to world
 		World.add(Game.engine.world, [ground]);
