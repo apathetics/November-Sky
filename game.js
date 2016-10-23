@@ -18,19 +18,18 @@ class Game {
 		//create physics bodies here
 		var testBox = Bodies.rectangle(100, 100, 64, 64);
 		var testBox2 = Bodies.rectangle(180, 120, 64, 64);
-		var testPair = Matter.Body.create({
-			parts: [testBox, testBox2],
-			isStatic: false
-		});
+		var constr = Matter.Constraint.create({bodyA: testBox, bodyB: testBox2});
 		var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
 		//add physics bodies to world
-		World.add(Game.engine.world, [testPair, ground]);
+		World.add(Game.engine.world, [testBox, testBox2, constr, ground]);
 		
 		//start game loop
 		var t0 = Date.now();
 		requestAnimationFrame(function gameLoop(){
 			var delta = (Date.now() - t0);
+			if (delta > 1000)
+				return;
 			Game.update(delta);
 			t0 = Date.now();
 			requestAnimationFrame(gameLoop);

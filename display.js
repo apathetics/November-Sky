@@ -59,6 +59,19 @@ class Display {
 			// pgfx.endFill();
 		});
 
+		var constraints = Composite.allConstraints(Game.engine.world);
+		constraints.forEach(function(constraint) {
+			//TODO: custom color per constraint
+			// pgfx.beginFill(0xFF0000, 1);
+			pgfx.lineStyle(2, 0x00FF00);
+
+			//create polygon out of all vectors of this constraint
+			pgfx.moveTo(constraint.bodyA.position.x, constraint.bodyA.position.y);
+			pgfx.lineTo(constraint.bodyB.position.x, constraint.bodyB.position.y);
+			
+			// pgfx.endFill();
+		});
+
 		Display.renderer.render(Display.stage);
 	}
 }
