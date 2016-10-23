@@ -108,7 +108,11 @@ function createArray(w, h, val) {
 }
 
 //start game when resources have loaded
-window.addEventListener("load", Game.init, false);
+window.addEventListener("load", function(){ 
+  Game.loadData(function(){ 
+    Game.init(); 
+  }); 
+}, false);
 window.addEventListener('keydown', function(event){
   if(event.keyCode == 32)
     Body.applyForce(Game.testBody, Vector.add(Game.testBody.position, Vector.create(0, 1)), Vector.create(0, -0.5));
