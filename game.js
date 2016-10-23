@@ -25,6 +25,7 @@ class Game {
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.rocket = null;
+		
 
 		//create physics bodies here
 		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });

@@ -3,6 +3,9 @@ class Rocket {
 		//needs container for parts
 		this.partContainer = [];
 		this.mainBody = null;
+		this.sensors = {};
+		this.controls = {};
+		this.usrLoop = function(){};
 	}
 
 	add(part) {

@@ -5,17 +5,38 @@
 }
 #coding {
 	position: absolute;
-	width: 50%;
-	margin: 0 auto;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	visibility: hidden;
-
+	background-color: rgba(0,0,0,0.75);
 	z-index: 0;
 }
+
+#submit{
+	border: none;
+	font-family: monospace;
+	background-color: #000000;
+	position: absolute;
+	right: 0;
+	bottom: 143px;
+	z-index: 100;
+	color: white;
+	padding: 25px 25px;
+
+}
+
 #editor {
+	position: absolute;
+	top: 450px;
+	bottom: 0;
+	width: 100%;
+	font-size: 20px;	
 	font-family: monospace;
 	background-color: #473c89;
 	border: none;
-	resize: none;
+	resize: vertical;
 	outline: none;
 	color: #ffffff;
 }
