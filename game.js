@@ -3,7 +3,10 @@ var Engine = Matter.Engine,
     Render = Matter.Render,
     World = Matter.World,
     Composite = Matter.Composite,
-    Bodies = Matter.Bodies;
+    Constraint = Matter.Constraint,
+    Bodies = Matter.Bodies
+    Vector = Matter.Vector
+    Body = Matter.Body;
 
 class Game {
 	static init() {
@@ -12,18 +15,35 @@ class Game {
 
 		//create physics engine
 		Game.engine = Engine.create();
-		
+
 		//create physics bodies here
-		var testBox = Bodies.rectangle(100, 100, 64, 64);
-		var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
+		var testBox1 = Bodies.rectangle(100, 100, 64, 64);
+    var testBox2 = Bodies.rectangle(250, 100, 64, 64);
+    var testBox3 = Bodies.rectangle(80, 50, 64, 64);
+    var testBox4 = Bodies.rectangle(270, 50, 64, 64);
+    //var testBox5 = Bodies.rectangle(175, 0, 64, 64);
+    /*Game.testBody = Body.create({
+      parts : [testBox1, testBox2, testBox3, testBox4, testBox5],
+      isStatic: false
+    });*/
+    var testComposite = Composite.create({
+      bodies : [testBox1, testBox2, testBox3, testBox4],
+      constraints : [Constraint.create({ bodyA : testBox1, bodyB : testBox2}),
+                    Constraint.create({ bodyA : testBox3, bodyB : testBox4})]
+    });
+
+    /*setTimeout(function(){
+      Body.applyForce(testBody, Vector.add(testBody.position, Vector.create(0,-1)), Vector.create(.25,-.5));
+    }, 1500);*/
+		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
 
 		//add physics bodies to world
-		World.add(Game.engine.world, [testBox, ground]);
-		
+		World.add(Game.engine.world, [testComposite, ground]);
+
 		//start game loop
 		var t0 = Date.now();
 		requestAnimationFrame(function gameLoop(){
-			var delta = (Date.now() - t0);
+      var delta = (Date.now() - t0);
 			Game.update(delta);
 			t0 = Date.now();
 			requestAnimationFrame(gameLoop);
@@ -41,3 +61,13 @@ class Game {
 
 //start game when resources have loaded
 window.addEventListener("load", Game.init, false);
+window.addEventListener('keydown', function(event){
+  if(event.keyCode == 32)
+    Body.applyForce(Game.testBody, Vector.add(Game.testBody.position, Vector.create(0, 1)), Vector.create(0, -0.5));
+
+    if(event.keyCode == 37)
+      Body.rotate(Game.testBody, -.1);
+
+    if(event.keyCode == 39)
+      Body.rotate(Game.testBody, .1);
+});
