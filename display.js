@@ -2,11 +2,15 @@ class Display {
 	static init() {
 		//create a canvas and context
 		Display.canvas = document.createElement("canvas");
+		
+		Display.hazeBuffer = document.createElement("canvas");
+
 		Display.resize();
 		Display.view = {
 			x: 0,
 			y: 0
 		};
+
 
 		//Create the renderer
 		Display.renderer = PIXI.autoDetectRenderer(Display.width, Display.height, {
@@ -21,6 +25,7 @@ class Display {
 
 		//used to render physics objects (for now)
 		Display.physicsGraphics = new PIXI.Graphics();
+		Display.stage.addChild(Display.hazeSprite);
 		Display.stage.addChild(Display.physicsGraphics);
 
 		//add canvas to the document
@@ -38,6 +43,30 @@ class Display {
 		Display.height = window.innerHeight;
 		Display.canvas.width = Display.width;
 		Display.canvas.height = Display.height;
+
+		var hc = Display.hazeBuffer.getContext("2d");
+		Display.hazeBuffer.width = Display.width;
+		Display.hazeBuffer.height = Display.height;
+		var bigdim = Math.max(Display.width, Display.height);
+		var grad = hc.createRadialGradient(
+			Display.width/2, 
+			Display.height*5/4, 
+			bigdim * 0.1, 
+			Display.width/2, 
+			Display.height*5/4, 
+			bigdim
+		);
+		grad.addColorStop(0.0, "#8A9AB5");
+		grad.addColorStop(0.35, "#59546E");
+		grad.addColorStop(0.60, "#322C42");
+		grad.addColorStop(1.00, "#1F1710");
+		hc.fillStyle = grad;
+		hc.fillRect(0,0,Display.width,Display.height);
+
+		Display.hazeSprite = new PIXI.Sprite(PIXI.Texture.fromCanvas(Display.hazeBuffer));
+		Display.hazeSprite.position = {x: 0, y: 0};
+		Display.hazeSprite.blendMode = PIXI.blendModes.ADD;
+		Display.hazeSprite.alpha = 0.9;
 	}
 
 	/**

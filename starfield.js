@@ -3,10 +3,16 @@ class Starfield {
 		this.n = n;
 		this.stars = [];
 		for (var i=0; i<n; i++) {
+			var r = 255 - Math.random()*10;
+			var g = 225 - Math.random()*180;
+			var b = 255 - Math.random()*15;
 			this.stars.push({
 				x: Math.random()*Display.width,
 				y: Math.random()*Display.height,
-				z: 11-Math.random()*Math.random()*10
+				z: 11-Math.random()*Math.random()*10,
+				r: r,
+				g: g,
+				b: b
 			});
 		}
 		this.gfx = new PIXI.Graphics();
@@ -30,8 +36,8 @@ class Starfield {
 			p.y = (p.y - vy/p.z) % Display.height;
 			if (p.y < 0) p.y += Display.height;
 
-			var val = 255 - (255 * p.z/11);
-			this.gfx.lineStyle(1, val | (val<<8) | (val<<16));
+			var val = 1- p.z/11;
+			this.gfx.lineStyle(1, (val*p.b) | ((val*p.g)<<8) | ((val*p.r)<<16));
 			this.gfx.moveTo(p.x, p.y);
 			this.gfx.lineTo(p.x - vx/p.z, p.y - vy/p.z + 1);
 		}

@@ -20,7 +20,7 @@ class Rocket {
 
 		//write "sensor" values
 		this.sensors.angle = this.mainBody.angle;
-		this.sensors.position = this.mainBody.position.x;
+		this.sensors.position = this.mainBody.position.x/Game.wallRadius;
 		this.sensors.altitude = this.mainBody.position.y;
 
 		//run user code

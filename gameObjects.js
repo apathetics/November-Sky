@@ -5,7 +5,7 @@ class GameObject{
     this.body = body;
     this.body.color = color;
     this.body.isFloating = true;
-    console.log(this.body.color);
+    // console.log(this.body.color);
   }
 
   destroy(){
@@ -14,7 +14,7 @@ class GameObject{
   }
 
   add(){
-    console.log(this.body.position);
+    // console.log(this.body.position);
     World.add(Game.engine.world, this.body);
   }
 }
@@ -22,7 +22,7 @@ class GameObject{
 class Obstacle extends GameObject{
   constructor(body, color){
     super(body, color);
-    console.log(this.body.isFloating);
+    // console.log(this.body.isFloating);
     this.body.isSensor = false;
     this.add();
   }
