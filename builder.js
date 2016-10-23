@@ -14,6 +14,8 @@ class Builder {
 		Builder.inv = Builder.makeGrid(Builder.invWidth, Builder.invHeight);
 		Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 		Builder.typeSelected = Game.types[0];
+		Builder.builderList = [];
+		Builder.invList = [];
 
 		Display.gridContainer = new PIXI.Container();
 		Display.invContainer = new PIXI.Container();
@@ -21,83 +23,90 @@ class Builder {
 		var gridSquareSize = 40;
 		var margin = 8;
 
-		//make the inventory grid
-		for (var x=0; x<Builder.gridWidth; x++) {
-			for (var y=0; y<Builder.gridHeight; y++) {
-				var g = new PIXI.Graphics();
-				g.interactive = true;
 
-				(function()
-				{
-					var o = g;
-					var i = x;
-					var j = y;
-					o.on('mousedown', function()
-					{
-						o.tint = Builder.typeSelected.color;
-						Builder.gridCellClicked(i, j);
+		//making builder grid
+	 	for (var x=0; x<Builder.gridWidth; x++) {
+	 		for (var y=0; y<Builder.gridHeight; y++) {
+	 			var g = new PIXI.Graphics();
+	 			g.interactive = true;
 
-					});
-					o.on('touchstart', function()
-					{
-						o.tint = Builder.typeSelected.color;
-						Builder.gridCellClicked(i, j);
-					});
+	 			(function()
+	 			{
+	 				var o = g;
+	 				var i = x;
+	 				var j = y;
 
-				})();
+	 				Builder.builderList.push(o);
 
-				g.beginFill(0xFFFFFF, 1);
-				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
-				g.endFill();
-				g.tint = 0x222222;
+	 				o.on('mousedown', function()
+	 				{
+	 					o.tint = Builder.typeSelected.color;
+	 					Builder.gridCellClicked(i, j);
+
+	 				});
+	 				o.on('touchstart', function()
+	 				{
+	 					o.tint = Builder.typeSelected.color;
+	 					Builder.gridCellClicked(i, j);
+	 				});
+
+	 			})();
+
+	 			g.beginFill(0xFFFFFF, 1);
+	 			g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
+	 			g.endFill();
+	 			g.tint = 0x222222;
 
 
-				Display.gridContainer.addChild(g);
-			}
-		}
+	 			Display.gridContainer.addChild(g);
+	 		}
+	 	}
 
-		Display.gridContainer.x = Display.width - 525;
-		Display.gridContainer.y = Display.length + 30;
+	 	//making inv grid
+	 	for (var x=0; x<Builder.invWidth; x++) 
+	 	{
+	 		for (var y=0; y<Builder.invHeight; y++) 
+	 		{
+	 			var g = new PIXI.Graphics();
+	 			g.interactive = true;
 
-		Display.stage.addChild(Display.gridContainer);
+	 			(function()
+	 			{
+	 				var o = g;
+	 				var i = x;
+	 				var j = y;
 
-		//making the parts inventory grid
-		for (var x=0; x<Builder.invWidth; x++) 
-		{
-			for (var y=0; y<Builder.invHeight; y++) 
-			{
-				var g = new PIXI.Graphics();
-				g.interactive = true;
+	 				Builder.invList.push(o);
+	 				o.on('mousedown', function()
+	 				{
 
-				(function()
-				{
-					var o = g;
-					var i = x;
-					var j = y;
+	 					o.tint = 0x03399ff;
+	 					Builder.typeSelected = Game.types[j]
 
-					o.on('mousedown', function()
-					{
-						o.tint = 0x03399ff;
 
-					});
-					o.on('touchstart', function()
-					{	
-						o.tint = 0x03399ff;
-					});
+	 				});
+	 				o.on('touchstart', function()
+	 				{	
+	 					o.tint = 0x03399ff;
+	 					Builder.typeSelected = Game.types[j]
+	 				});
 
-				})();
+	 			})();
 
-				g.beginFill(0x4d79ff, 1);
-				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
-				g.endFill();
-				g.tint = 0x676798;
+	 			g.beginFill(0x4d79ff, 1);
+	 			g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
+	 			g.endFill();
+	 			g.tint = 0x676798;
 
-				Display.invContainer.addChild(g);
-			}
-		}
-		Display.invContainer.y = Display.length + 30;
+	 			Display.invContainer.addChild(g);
+	 		}
+	 	}
+	 	Display.invContainer.y = Display.length + 30;
+	 	Display.stage.addChild(Display.invContainer);
+	 	Display.gridContainer.x = Display.width - 525;
+	 	Display.gridContainer.y = Display.length + 30;
 
-		Display.stage.addChild(Display.invContainer);
+	 	Display.stage.addChild(Display.gridContainer);
 
 		//make a button for make_rocket()
 		var makeRocket_button = new PIXI.Graphics();
@@ -154,6 +163,18 @@ class Builder {
 
 		Display.stage.addChild(makeCode_button);
 
+		//make a button for reset()
+		var reset_button = new PIXI.Graphics();
+		reset_button.interactive = true;
+		reset_button.beginFill(0xaa80ff,1);
+		reset_button.lineStyle(4, 0xc2c2d6, 1);
+		reset_button.drawRoundedRect(Display.width-100, Display.length + 430, 75, 75, 5);
+		reset_button.endFill();
+		reset_button.on('mousedown', Builder.reset);
+		reset_button.on('touchstart', Builder.reset);
+
+		Display.stage.addChild(reset_button);
+
 
 	}
 
@@ -172,6 +193,34 @@ class Builder {
 	static hide() {
 		Display.gridContainer.visible = false;
 	}
+	/**
+	 * Reset the selected grids
+	 */
+	 static reset(){
+	 	Builder.builder_grid();
+	 	Builder.inv_grid();
+	 	Builder.typeSelected = Game.types[0];
+	 }
+
+	 static builder_grid()
+	 {
+	 	for(var k = 0; k<Builder.builderList.length; k++)
+	 	{
+	 		Builder.builderList[k].tint = 0x222222;
+	 	}
+
+	 	Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
+	 }
+
+	 static inv_grid()
+	 {
+	 	for(var k = 0; k<Builder.invList.length; k++)
+	 	{
+	 		Builder.invList[k].tint = 0x676798;
+	 	}
+
+	 	Builder.inv = Builder.makeGrid(Builder.invWidth, Builder.invHeight);
+	 }
 
 	/**
 	 * Returns 2D array initialized to null.
@@ -188,9 +237,9 @@ class Builder {
 	 * Handles a click on a part type in the inventory.
 	 * Set currently selected type.
 	 */
-	static typeClicked(type) {
+	static typeClicked(x, y) {
 
-
+		Builder.inv[x][y] = Builder.typeSelected;
 	}
 
 	/**
@@ -202,6 +251,13 @@ class Builder {
 		//handles click first?
 		//click
 		Builder.grid[x][y] =  Builder.typeSelected;
+
+	}
+
+	static reset_gridCellClicked(x, y) {
+		//handles click first?
+		//click
+		Builder.grid[x][y] =  null;
 
 	}
 
