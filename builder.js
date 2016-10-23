@@ -97,6 +97,7 @@ class Builder {
 	 */
 	static show() {
 		Display.gridContainer.visible = true;
+		Game.state = BUILD;
 	}
 
 	/**
@@ -104,6 +105,7 @@ class Builder {
 	 */
 	static hide() {
 		Display.gridContainer.visible = false;
+		Editor.show();
 	}
 
 	/**
