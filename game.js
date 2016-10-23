@@ -18,26 +18,27 @@ class Game {
 		//initialize rendering
 		Display.init();
 		Builder.init();
-    	Editor.init();
+    Editor.init();
 		Builder.hide();
 
     Game.state = PLAY;
+
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.rocket = null;
 
 
+    Game.white = 0xFFFFFF;
 		//create physics bodies here
 		var ground = Bodies.rectangle(Display.width-700, Display.length+781, 1500, 60, { isStatic: true });
-    	var leftWall = Bodies.rectangle(Display.width-1419, Display.length+250, 40, 1000, { isStatic: true });
-    	var rightWall = Bodies.rectangle(Display.width-21, Display.length+250, 40, 1000, { isStatic: true });
-    	var staticBodyArray = [ground, leftWall, rightWall];
+    var leftWall = Bodies.rectangle(Display.width-1419, Display.length+250, 40, 1000, { isStatic: true });
+    var rightWall = Bodies.rectangle(Display.width-21, Display.length+250, 40, 1000, { isStatic: true });
+    var staticBodyArray = [ground, leftWall, rightWall];
     staticBodyArray.forEach(function(body){
-      body.color = 0xFFFFFF;
+      body.color = Game.white;
     });
 
     //obstacles
-    Game.white = 0xFFFFFF;
     Game.obstacles = [new Obstacle(Bodies.circle(250, 100, 30), Game.white),
                       new Obstacle(Bodies.circle(600, 150, 30), Game.white),
                       new Obstacle(Bodies.circle(950, 75, 30), Game.white)];
@@ -66,12 +67,14 @@ class Game {
       }
     })
     while(Game.obstacles.length < 5){
+      //between 100 and 1100
       var tempX = 100 + (Math.random()*1000);
+      //between y-500 and y-1500
       var tempY = playerPos.y - 500 - (Math.random()*1000);
+      //between 20 and 50
       var tempR = 20+(Math.random()*30);
-      console.log("X: "+tempX+"\nY: "+tempY+"\nR: "+tempR+"\n");
       var newCircle = new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white);
-      Body.setDensity(newCircle, .002);
+      Body.setDensity(newCircle, .002); //set density to 2* default
       Game.obstacles.push(newCircle);
     }
   }
