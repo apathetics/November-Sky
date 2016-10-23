@@ -18,10 +18,10 @@ class Game {
 		//initialize rendering
 		Display.init();
 		Builder.init();
-    Editor.init();
+    	Editor.init();
 		Builder.hide();
 
-    Game.state = PLAY;
+    	Game.state = PLAY;
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.rocket = null;
@@ -29,6 +29,8 @@ class Game {
 		//create physics bodies here
 		var ground = Bodies.rectangle(400, 600, 1600, 60, { isStatic: true });
 		ground.color = 0xFFFFFF;
+    var obstacle = new Obstacle(Bodies.rectangle(200, 200, 50, 50));
+    obstacle.body.color = 0xFFFFFF;
 
 		//add physics bodies to world
 		World.add(Game.engine.world, [ground]);
@@ -64,6 +66,15 @@ class Game {
 		//update rocket
 		if (Game.rocket instanceof Rocket) {
 			Game.rocket.update(timeDelta);
+			var aabb = Game.rocket.mainBody.bounds;
+			var midX = (aabb.max.x + aabb.min.x) / 2;
+			var midY = (aabb.max.y + aabb.min.y) / 2;
+			Display.view.x = midX - Display.width / 2;
+			Display.view.y = midY - Display.height / 2;
+		}
+		else {
+			Display.view.x = 0;
+			Display.view.y = 0;
 		}
 
 		//step physics

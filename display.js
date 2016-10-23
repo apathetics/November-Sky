@@ -3,6 +3,10 @@ class Display {
 		//create a canvas and context
 		Display.canvas = document.createElement("canvas");
 		Display.resize();
+		Display.view = {
+			x: 0,
+			y: 0
+		};
 		
 		//Create the renderer
 		Display.renderer = PIXI.autoDetectRenderer(Display.width, Display.height, {
@@ -37,6 +41,9 @@ class Display {
 	 * Displays the game.
 	 */
 	static frame() {
+		Display.physicsGraphics.position.x = -Display.view.x;
+		Display.physicsGraphics.position.y = -Display.view.y;
+
 		var pgfx = Display.physicsGraphics;
 
 		//clear screen

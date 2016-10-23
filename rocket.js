@@ -2,6 +2,7 @@ class Rocket {
 	constructor() {
 		//needs container for parts
 		this.partContainer = [];
+		this.mainBody = null;
 	}
 
 	add(part) {
