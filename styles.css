@@ -26,6 +26,18 @@
 	padding: 25px 25px;
 
 }
+#done{
+	border: none;
+	font-family: monospace;
+	background-color: #000000;
+	position: absolute;
+	right: 0;
+	bottom: 50px;
+	z-index: 100;
+	color: white;
+	padding: 25px 25px;
+
+}
 
 #editor {
 	position: absolute;

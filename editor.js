@@ -11,6 +11,8 @@ class Editor{
   }
 
   static parse_text(text){
+    if(Game.rocket == null)
+      return;
    var sensors = Game.rocket.sensors;
    var controls = Game.rocket.controls;
    var f = eval("()=>{"+text+"}");
