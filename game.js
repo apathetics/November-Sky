@@ -25,7 +25,7 @@ class Game {
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.rocket = null;
-		
+
 
 		//create physics bodies here
 		var ground = Bodies.rectangle(Display.width-700, Display.length+781, 1500, 60, { isStatic: true });
@@ -69,8 +69,10 @@ class Game {
       var tempX = 100 + (Math.random()*1000);
       var tempY = playerPos.y - 500 - (Math.random()*1000);
       var tempR = 20+(Math.random()*30);
-      console.log(tempX+"\n"+tempY+"\n"+tempR);
-      Game.obstacles.push(new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white));
+      console.log("X: "+tempX+"\nY: "+tempY+"\nR: "+tempR+"\n");
+      var newCircle = new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white);
+      Body.setDensity(newCircle, .002);
+      Game.obstacles.push(newCircle);
     }
   }
 
