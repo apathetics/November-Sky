@@ -1,29 +1,29 @@
 {
 	"types": [
 		{
-			"name": "controller",
+			"name": "controller"
 		},
 
 		{
 			"name": "booster",
-			"thrust": 100,
+			"thrust": 100
 		},
 		
 		{
 			"name": "fuel-tank",
-			"capacity": 100,
+			"capacity": 100
 		},
 		
 		{
-			"name": "hull-piece",
+			"name": "hull-piece"
 		},
 		
 		{
-			"name": "nose",
+			"name": "nose"
 		},
 		
 		{
-			"name": "fin",
+			"name": "fin"
 		}
 	]
 }

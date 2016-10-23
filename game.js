@@ -17,10 +17,15 @@ class Game {
 		
 		//create physics bodies here
 		var testBox = Bodies.rectangle(100, 100, 64, 64);
+		var testBox2 = Bodies.rectangle(180, 120, 64, 64);
+		var testPair = Matter.Body.create({
+			parts: [testBox, testBox2],
+			isStatic: false
+		});
 		var ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true });
 
 		//add physics bodies to world
-		World.add(Game.engine.world, [testBox, ground]);
+		World.add(Game.engine.world, [testPair, ground]);
 		
 		//start game loop
 		var t0 = Date.now();
