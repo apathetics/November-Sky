@@ -5,37 +5,40 @@ class Builder {
 	 * Create grid cells and make clickable
 	 */
 	static init() {
-		Builder.grid = makeGrid(Builder.gridWidth, Builder.gridHeight);
-		this.grid = [];
-		this.gridWidth = 8;
-		this.typeSelected = null;
+		Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
+		Builder.grid = [];
+		Builder.gridWidth = 8;
+		Builder.gridHeight = 8;
+		Builder.typeSelected = null;
+
+		Display.gridContainer = new PIXI.Container();
+		var gridSquareSize = 64;
+		var margin = 8;
+		for (var x=0; x<Builder.gridWidth; x++) {
+			for (var y=0; y<Builder.gridHeight; y++) {
+				var g = new PIXI.Graphics();
+				g.beginFill(0xFFFFFF, 1);
+				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
+				g.endFill();
+				g.tint = 0x0000FF;
+				Display.gridContainer.addChild(g);
+			}
+		}
+		Display.stage.addChild(Display.gridContainer);
 	}
 
 	/**
 	 * Display the builder interface
 	 */
 	static show() {
-
+		Display.gridContainer.visible = true;
 	}
 
 	/**
 	 * Hide the builder interface
 	 */
 	static hide() {
-
-	}
-
-	function createArray(length) {
-
-    var arr = new Array(length || 0),
-        i = length;
-
-    if (arguments.length > 1) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        while(i--) arr[length-1 - i] = createArray.apply(this, args);
-    }
-
-    return arr;
+		Display.gridContainer.visible = false;
 	}
 
 	/**
@@ -45,7 +48,6 @@ class Builder {
 	 */
 	static makeGrid(w, h) {
 		return createArray(w,h);
-
 	}
 
 	/**
