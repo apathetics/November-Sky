@@ -5,8 +5,9 @@
 		},
 
 		{
-			"name": "booster",
-			"thrust": 100
+			"name": "thruster",
+			"behaviors": ["thrust"],
+			"thrust": 2
 		},
 		
 		{

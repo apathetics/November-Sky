@@ -1,3 +1,5 @@
+var Constraint = Matter.Constraint;
+
 class Builder {
 	/**
 	 * Create pixi Container for builder interface.
@@ -14,7 +16,7 @@ class Builder {
 		var gridSquareSize = 64;
 		var margin = 8;
 
-		//make the inventory grid 
+		//make the inventory grid
 		for (var x=0; x<Builder.gridWidth; x++) {
 			for (var y=0; y<Builder.gridHeight; y++) {
 				var g = new PIXI.Graphics();
@@ -31,13 +33,13 @@ class Builder {
 
 					});
 					o.on('touchstart', function()
-					{	
+					{
 						o.tint = 0xFFFFFF;
 						Builder.gridCellClicked(i, j);
 					});
 
 				})();
-				
+
 				g.beginFill(0xFFFFFF, 1);
 				g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
 				g.endFill();
@@ -48,7 +50,7 @@ class Builder {
 			}
 		}
 		Display.stage.addChild(Display.gridContainer);
-		
+
 		//make a button for make_rocket()
 		var makeRocket_button = new PIXI.Graphics();
 		makeRocket_button.interactive = true;
@@ -73,7 +75,7 @@ class Builder {
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
-		Display.stage.addChild(makeShow_button);		
+		Display.stage.addChild(makeShow_button);
 
 		//make a button for hide()
 		var makeHide_button = new PIXI.Graphics();
@@ -85,7 +87,7 @@ class Builder {
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
-		Display.stage.addChild(makeHide_button);		
+		Display.stage.addChild(makeHide_button);
 
 
 	}
@@ -95,6 +97,7 @@ class Builder {
 	 */
 	static show() {
 		Display.gridContainer.visible = true;
+		Game.state = BUILD;
 	}
 
 	/**
@@ -102,6 +105,7 @@ class Builder {
 	 */
 	static hide() {
 		Display.gridContainer.visible = false;
+		Editor.show();
 	}
 
 	/**
@@ -144,24 +148,46 @@ class Builder {
 	 * Add composite to game world.
 	 */
 	static makeRocket() {
-
+		var SIDE_LENGTH = 25;
 		var rocket = new Rocket();
-		for (var x=0; x<Builder.gridWidth; x++) 
-		{
-			for (var y=0; y<Builder.gridHeight; y++) 
-			{
-
-				if(Builder.grid[x][y] !== null)
-				{
-					var obj = Bodies.rectangle(20*x+500, 20*y+500, 25, 25);
+		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
+		//initialize parts != null with body and type
+		for (var x=0; x<Builder.gridWidth; x++){
+			for (var y=0; y<Builder.gridHeight; y++){
+				if(Builder.grid[x][y] !== null){	//if partType != null
+					var obj = Bodies.rectangle(SIDE_LENGTH*x+500, SIDE_LENGTH*y+100,
+						SIDE_LENGTH, SIDE_LENGTH);
 					var part = new Part(obj, Builder.grid[x][y]);
+					temp[x][y] = obj;
 					rocket.add(part);
-					World.add(Game.engine.world, obj);
+					World.add(Game.engine.world, obj); //add obj to the world
 				}
 			}
-
 		}
-		Game.rocket = rocket;
+		//check for other blocks, constrain if != null
+		for(var x = 0; x < temp.length-1; x++){
+			for(var y = 0; y < temp[0].length-1; y++){
+				if(temp[x][y] == null)
+					continue;
+				if(temp[x+1][y] !== null)		//check right
+					Builder.constrain(temp[x][y], temp[x+1][y]);
+				if(temp[x][y+1] !== null)		//check down
+					Builder.constrain(temp[x][y], temp[x][y+1]);
+				if(temp[x+1][y+1] !== null)		//check down right diagonally
+					Builder.constrain(temp[x][y], temp[x+1][y+1]);
+			}
+		}
+
+		Game.rocket = rocket; //make rocket global
+	}
+
+	static constrain(body1, body2){
+		console.log("something");
+		var newConstraint = Constraint.create({
+			bodyA: body1,
+			bodyB: body2
+		});
+		World.add(Game.engine.world, newConstraint);
 	}
 
 }
