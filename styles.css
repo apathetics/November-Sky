@@ -14,5 +14,8 @@
 #editor {
 	font-family: monospace;
 	background-color: #473c89;
+	border: none;
+	resize: none;
+	outline: none;
 	color: #ffffff;
 }
