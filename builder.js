@@ -5,10 +5,11 @@ class Builder {
 	 * Create grid cells and make clickable
 	 */
 	static init() {
-		this.grid = [];
-		this.gridWidth = 8;
-		this.gridHeight = 8;
-		this.typeSelected = null;
+		Builder.gridWidth = 8;
+		Builder.gridHeight = 8;
+		Builder.grid = makeGrid(Builder.gridWidth, Builder.gridHeight);
+		Builder.typeSelected = null;
+
 	}
 
 	/**
@@ -25,6 +26,19 @@ class Builder {
 
 	}
 
+	function createArray(length) {
+
+    var arr = new Array(length || 0),
+        i = length;
+
+    if (arguments.length > 1) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        while(i--) arr[length-1 - i] = createArray.apply(this, args);
+    }
+
+    return arr;
+	}
+
 	/**
 	 * Returns 2D array initialized to null.
 	 * @param w width
@@ -32,6 +46,7 @@ class Builder {
 	 */
 	static makeGrid(w, h) {
 
+		return createArray(w,h);
 	}
 
 	/**
@@ -48,6 +63,9 @@ class Builder {
 	 * Update displayed sprite for that position.
 	 */
 	static gridCellClicked(x, y) {
+		//handles click first?
+		//click
+		Builder.grid[x][y] = click; 
 
 	}
 
