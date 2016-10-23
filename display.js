@@ -44,19 +44,28 @@ class Display {
 
 		//iterate through all physics bodies
 		var bodies = Composite.allBodies(Game.engine.world);
-		bodies.forEach(function(body) {
-			var vertices = body.vertices;
+		var renderPart = function(part) {
+			var vertices = part.vertices;
 			
-			//TODO: custom color per body
+			//TODO: custom color per part
 			// pgfx.beginFill(0xFF0000, 1);
-			pgfx.lineStyle(2, 0xFF0000);
+			pgfx.lineStyle(2, part.color);
 
-			//create polygon out of all vectors of this body
+			//create polygon out of all vectors of this part
 			pgfx.moveTo(vertices[vertices.length-1].x, vertices[vertices.length-1].y);
 			for (var i=0; i<vertices.length; i++) {
 				pgfx.lineTo(vertices[i].x, vertices[i].y);
 			}
 			// pgfx.endFill();
+		}
+		bodies.forEach(function(body) {
+			if (body.parts.length > 1) {
+				body.parts.forEach(function(part){
+					renderPart(part);
+				})
+			}
+			else
+				renderPart(body.parts[0]);
 		});
 
 		var constraints = Composite.allConstraints(Game.engine.world);

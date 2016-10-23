@@ -10,7 +10,7 @@ class Rocket {
 	}
 
 	update(dTime) {
-		for(i=0; i<this.partContainer.length; i++) {
+		for(var i=0; i<this.partContainer.length; i++) {
 			this.partContainer[i].update(dTime);
 		}
 	}
