@@ -120,26 +120,34 @@ class Builder {
 
 		makeRocket_button.beginFill(0xff4d4d, 1);
 		makeRocket_button.lineStyle(4, 0x9494b8, 1);
-		makeRocket_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
+		makeRocket_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeRocket_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeRocket_button.endFill();
 		makeRocket_button.on('mousedown', Builder.makeRocket);
 		makeRocket_button.on('touchstart', Builder.makeRocket);
 		makeRocket_button.on('mousedown', Builder.hide);
 		makeRocket_button.on('touchstart', Builder.hide);
 
+		var text = new PIXI.Text('launch',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeRocket_button.position.x+8, y: makeRocket_button.position.y+8};
 		Display.stage.addChild(makeRocket_button);
+		Display.stage.addChild(text);
 
 		//make a button for show()
 		var makeShow_button = new PIXI.Graphics();
 		makeShow_button.interactive = true;
 		makeShow_button.beginFill(0xffcc00,1);
 		makeShow_button.lineStyle(4, 0xc2c2d6, 1);
-		makeShow_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
+		makeShow_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeShow_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeShow_button.endFill();
 		makeShow_button.on('mousedown', Builder.show);
 		makeShow_button.on('touchstart', Builder.show);
 
+		var text = new PIXI.Text('build',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeShow_button.position.x+8, y: makeShow_button.position.y+8};
 		Display.stage.addChild(makeShow_button);
+		Display.stage.addChild(text);
 
 		//make a button for hide()
 		var makeHide_button = new PIXI.Graphics();
@@ -147,12 +155,16 @@ class Builder {
 
 		makeHide_button.beginFill(0x00b359,1);
 		makeHide_button.lineStyle(4, 0xc2c2d6, 1);
-		makeHide_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
+		makeHide_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeHide_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeHide_button.endFill();
 		makeHide_button.on('mousedown', Builder.hide);
 		makeHide_button.on('touchstart', Builder.hide);
 
+		var text = new PIXI.Text('close',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeHide_button.position.x+8, y: makeHide_button.position.y+8};
 		Display.stage.addChild(makeHide_button);
+		Display.stage.addChild(text);
 
 		//make a button for code()
 		var makeCode_button = new PIXI.Graphics();
@@ -160,26 +172,34 @@ class Builder {
 
 		makeCode_button.beginFill(0x3399ff,1);
 		makeCode_button.lineStyle(4, 0xc2c2d6, 1);
-		makeCode_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
+		makeCode_button.drawRoundedRect(0, 0, bw, bh, 5);
+		makeCode_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		makeCode_button.endFill();
 		makeCode_button.on('mousedown', Builder.hide);
 		makeCode_button.on('touchstart', Builder.hide);
 		makeCode_button.on('mousedown', Editor.show);
 		makeCode_button.on('touchstart', Editor.show);
 
+		var text = new PIXI.Text('program',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: makeCode_button.position.x+8, y: makeCode_button.position.y+8};
 		Display.stage.addChild(makeCode_button);
+		Display.stage.addChild(text);
 
 		//make a button for reset()
 		var reset_button = new PIXI.Graphics();
 		reset_button.interactive = true;
 		reset_button.beginFill(0xaa80ff,1);
 		reset_button.lineStyle(4, 0xc2c2d6, 1);
-		reset_button.drawRoundedRect(Display.width-bw-marginX, (y++)*bh+y*marginY, bw, bh, 5);
+		reset_button.drawRoundedRect(0, 0, bw, bh, 5);
+		reset_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
 		reset_button.endFill();
 		reset_button.on('mousedown', Builder.reset);
 		reset_button.on('touchstart', Builder.reset);
 
+		var text = new PIXI.Text('reset',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
+		text.position = {x: reset_button.position.x+8, y: reset_button.position.y+8};
 		Display.stage.addChild(reset_button);
+		Display.stage.addChild(text);
 
 
 	}
@@ -208,6 +228,7 @@ class Builder {
 	 	Builder.builder_grid();
 	 	Builder.inv_grid();
 	 	Builder.typeSelected = Game.types[0];
+	 	Game.reset();
 	 }
 
 	 static builder_grid()

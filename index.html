@@ -20,6 +20,7 @@
 
 </div>
 <div id="coding">
+	<div style="padding-left: 16px;">
 	<h1 style="color:white; font-family: monospace;">Usable data</h1>
 	<ul style="color:white; font-family: monospace;">
 		<li>controls.thrust (value from (0, 100)%)</li>
@@ -28,10 +29,10 @@
 		<li>sensors.position (current horizontal x position (-1.0, 1.0)</li>
 		<li>sensors.angle (current angle in radians; vertical is 0, left is negative, right is positive)</li>
 	</ul>
+	</div>
 	<button type="button" onclick="Editor.perform(Editor.text_area.value)" id="submit">Submit</button>
 	<button type="button" onclick="Editor.hide()" id="done">Done</button>
-	<textarea id="editor">//full speed ahead
-controls.thrust = 100;</textarea>
+	<textarea id="editor" style="padding: 16px; padding-right: 0; box-sizing: border-box;">controls.thrust = 100;</textarea>
 </div>
 </body>
 </html>
