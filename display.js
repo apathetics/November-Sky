@@ -23,11 +23,14 @@ class Display {
 		Starfield.init(2000);
 		Display.stage.addChild(Starfield.gfx);
 
+		Particle.init(400);
+		Display.stage.addChild(Particle.gfx);
 		//used to render physics objects (for now)
 		Display.physicsGraphics = new PIXI.Graphics();
 		Display.stage.addChild(Display.hazeSprite);
 		Display.stage.addChild(Display.physicsGraphics);
 
+		
 		//add altimeter
 		Display.altim = new PIXI.Text("[alt]",{fontFamily : 'monospace', fontSize: 28, fill : 0xFFFFFF, align : 'center'});
 		Display.stage.addChild(Display.altim);
@@ -83,6 +86,7 @@ class Display {
 		var pgfx = Display.physicsGraphics;
 
 		Starfield.update(16);
+		Particle.update(16);
 
 		//clear screen
 		pgfx.clear();
@@ -91,7 +95,7 @@ class Display {
 		if (Game.rocket instanceof Rocket) {
 			Display.altim.visible = true;
 			Display.altim.position = {x: Display.width * 0.5 - Display.altim.width * 0.5, y: Display.height - 48};
-			Display.altim.setText("alt: "+(Game.altitude().toFixed(1))+"m");
+			Display.altim.text=("alt: "+(Game.altitude().toFixed(1))+"m");
 		}
 		else {
 			Display.altim.visible = false;
