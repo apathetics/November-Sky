@@ -63,6 +63,8 @@ class Display {
 			Display.height*5/4, 
 			bigdim
 		);
+
+		//create gradient over launch pad
 		grad.addColorStop(0.0, "#8A9AB5");
 		grad.addColorStop(0.35, "#59546E");
 		grad.addColorStop(0.60, "#322C42");
@@ -70,6 +72,7 @@ class Display {
 		hc.fillStyle = grad;
 		hc.fillRect(0,0,Display.width,Display.height);
 
+		//create haze over launch pad
 		Display.hazeSprite = new PIXI.Sprite(PIXI.Texture.fromCanvas(Display.hazeBuffer));
 		Display.hazeSprite.position = {x: 0, y: 0};
 		Display.hazeSprite.blendMode = PIXI.blendModes.ADD;
@@ -91,11 +94,12 @@ class Display {
 		//clear screen
 		pgfx.clear();
 
-		//altimeter update
-		if (Game.rocket instanceof Rocket) {
+		//altimeter and distance update
+		if (Game.rocket instanceof Rocket) {	//if it's not null
 			Display.altim.visible = true;
-			Display.altim.position = {x: Display.width * 0.5 - Display.altim.width * 0.5, y: Display.height - 48};
-			Display.altim.text=("alt: "+(Game.altitude().toFixed(1))+"m");
+			Display.altim.position = {x: Display.width * 0.5 - Display.altim.width * 0.5, y: Display.height - 64};
+			Display.altim.text = ("altitude: " + (Game.altitude().toFixed(1)) +
+				"m\nposition: " + (Game.distance().toFixed(1)));
 		}
 		else {
 			Display.altim.visible = false;
@@ -119,12 +123,16 @@ class Display {
 		}
 		bodies.forEach(function(body) {
 			if (body.parts.length > 1) {
-				body.parts.forEach(function(part){
-					renderPart(part);
+				if(body.color != Game.invisible){
+					body.parts.forEach(function(part){
+						renderPart(part);
 				})
+				}
 			}
-			else
-				renderPart(body.parts[0]);
+			else{
+				if(body.color != Game.invisible)
+					renderPart(body.parts[0]);
+			}
 		});
 
 		var constraints = Composite.allConstraints(Game.engine.world);

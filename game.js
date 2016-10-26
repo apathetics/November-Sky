@@ -23,6 +23,8 @@ class Game {
 		Builder.hide();
 
 		Game.wallRadius = 500;
+		Game.wallHeight = 5000;
+		Game.NUM_ASTEROIDS = 10;
 
 		//create physics engine
 		Game.engine = Engine.create();
@@ -48,14 +50,18 @@ class Game {
 		World.clear(Game.engine.world);
 
 		Game.black = 0x000000;
+		Game.invisible = 0x000001;
 		//create physics bodies here
 		var ground = Bodies.rectangle(0, 30, 1500, 200, { isStatic: true });
-		// Game.leftWall = Bodies.rectangle(-500, 0, 40, 1000, { isStatic: true });
-		// Game.rightWall = Bodies.rectangle(500, 0, 40, 1000, { isStatic: true });
-		var staticBodyArray = [ground];
-		staticBodyArray.forEach(function(body){
+		Game.leftWall = Bodies.rectangle(-Game.wallRadius, 0, 200, Game.wallHeight*2, { isFloating: true, isStatic: false, inertia: Infinity});
+		Game.rightWall = Bodies.rectangle(Game.wallRadius, 0, 200, Game.wallHeight*2, { isFloating: true, isStatic: false, inertia: Infinity});
+		var staticBodyArray = [ground, Game.leftWall, Game.rightWall];
+		/*staticBodyArray.forEach(function(body){
 			body.color = Game.black;
-		});
+		});*/
+		ground.color = Game.black;
+		Game.leftWall.color = Game.invisible;
+		Game.rightWall.color = Game.invisible;
 
 	    //obstacles
 	    Game.obstacles = [];
@@ -66,29 +72,45 @@ class Game {
 
 	static altitude() {
 		if (Game.rocket instanceof Rocket)
-			return -Game.rocket.mainBody.position.y*0.1;
+			return (-Game.rocket.mainBody.position.y * 0.1) - 8.2;
+	}
+
+	static distance(){
+		if (Game.rocket instanceof Rocket)
+			return Game.rocket.mainBody.position.x / Game.wallRadius;
 	}
 
 	static updateObstacles(){
 		var playerPos = Game.rocket.mainBody.position;
 		Game.obstacles.forEach(function(obj) {
-			if(obj.body.position.y - playerPos.y > Display.height || obj.body.position.y + playerPos.y < 5*playerPos.y){
+			if(obj.body.position.y - playerPos.y > Display.height ||
+				 obj.body.position.y + playerPos.y < 5*playerPos.y)
+			{
 				obj.destroy();
 				Game.obstacles.splice(Game.obstacles.indexOf(obj), 1);
 			}
 		})
-		while(Game.obstacles.length < 5){
-      //between 100 and 1100
-      var tempX = -500 + (Math.random()*1000);
-      //between y-500 and y-1500
-      var tempY = playerPos.y - 500 - (Math.random()*1000);
-      //between 20 and 50
-      var tempR = 20+(Math.random()*30);
-      var newCircle = new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white);
-      Body.setDensity(newCircle, .002); //set density to 2* default
-      Game.obstacles.push(newCircle);
-  }
-}
+		while(Game.obstacles.length < Game.NUM_ASTEROIDS){
+      		//between -500 and 500
+      		var tempX = -Game.wallRadius + (Math.random() * 2 * Game.wallRadius);
+      		//between y-500 and y-1500
+      		var tempY = playerPos.y - 500 - (Math.random() * 1000);
+      		//between 20 and 50
+      		var tempR = 20 + (Math.random() * 30);
+      		var newCircle = new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white);
+      		Body.setDensity(newCircle, .002); //set density to 2* default
+      		Game.obstacles.push(newCircle);
+  		}
+	}
+
+	static updateWalls(){
+		//These 2 lines took me 2 hours
+		//It still doesn't work though
+		//Game.leftWall.force = Vector.create(0,Game.rocket.mainBody.velocity.y * timeDelta);
+		//Game.rightWall.force = Vector.create(0,Game.rocket.mainBody.velocity.y * timeDelta);
+		Game.leftWall.position = Vector.create(-Game.wallRadius,Game.rocket.mainBody.position.y);
+		Game.rightWall.position.y = Vector.create(Game.wallRadius,Game.rocket.mainBody.position.y);
+	}
 
 	/**
 	 * Loads resources and then calls callback.
@@ -115,6 +137,7 @@ class Game {
 			Display.view.x = midX - Display.width / 2;
 			Display.view.y = midY - Display.height / 2;
 			Game.updateObstacles();
+			Game.updateWalls(timeDelta);
 		}
 		else {
 			Display.view.x = -Display.width/2;

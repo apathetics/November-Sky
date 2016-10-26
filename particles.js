@@ -9,7 +9,7 @@ class Particle {
 	}
 
 	static makeParticle(x,y,vx,vy,r,g,b,size,life) {
-		Particle.idx = (Particle.idx+1)%Particle.n;
+		Particle.idx = (Particle.idx+1)%Particle.n; //we only want n particles
 		Particle.particles[Particle.idx] = {
 			x: x,
 			y: y,
@@ -29,8 +29,10 @@ class Particle {
 			if (p.t >= p.life)
 				continue;
 			p.t++;
-			p.x += p.vx;
-			p.y += p.vy;
+			p.x += p.vx;	//increment position of x with velocity of x
+			p.y += p.vy;	//increment position of y with velocity of y
+			
+			//as particle gets older, its alpha decreases (particle fades)
 			Particle.gfx.beginFill(p.col, Math.max(0,1-p.t/p.life));
 			Particle.gfx.drawCircle(p.x - Display.view.x, p.y - Display.view.y, p.size);
 			Particle.gfx.endFill();
