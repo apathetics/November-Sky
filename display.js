@@ -2,58 +2,41 @@ class Display {
 	static init() {
 		//create a canvas and context
 		Display.canvas = document.createElement("canvas");
-		
 		Display.hazeBuffer = document.createElement("canvas");
 
-		Display.resize();
 		Display.view = {
 			x: 0,
 			y: 0
 		};
-
 
 		//Create the renderer
 		Display.renderer = PIXI.autoDetectRenderer(Display.width, Display.height, {
 			view: Display.canvas
 		});
 
-		//Create a container object called the "stage"
-		Display.stage = new PIXI.Container();
-
-		Starfield.init(2000);
-		Display.stage.addChild(Starfield.gfx);
-
-		Particle.init(400);
-		Display.stage.addChild(Particle.gfx);
-		//used to render physics objects (for now)
-		Display.physicsGraphics = new PIXI.Graphics();
-		Display.stage.addChild(Display.hazeSprite);
-		Display.stage.addChild(Display.physicsGraphics);
-
-		
-		//add altimeter
-		Display.altim = new PIXI.Text("[alt]",{fontFamily : 'monospace', fontSize: 28, fill : 0xFFFFFF, align : 'center'});
-		Display.stage.addChild(Display.altim);
+		Display.rebuild();
 
 		//add canvas to the document
 		document.getElementById("container").appendChild(Display.canvas);
 
 		//watch for resize
-		window.addEventListener("resize", Display.resize, false);
+		window.addEventListener("resize", Display.rebuild, false);
 	}
 
 	/**
+	 * Rebuilds the PIXI stage.
 	 * Handles a window resize and changes the size of the canvas.
 	 */
-	static resize() {
+	static rebuild() {
+		Display.stage = new PIXI.Container();
+
 		Display.width = window.innerWidth;
 		Display.height = window.innerHeight;
-		Display.canvas.width = Display.width;
-		Display.canvas.height = Display.height;
+		Display.renderer.resize(Display.width, Display.height);
 
-		var hc = Display.hazeBuffer.getContext("2d");
 		Display.hazeBuffer.width = Display.width;
 		Display.hazeBuffer.height = Display.height;
+		var hc = Display.hazeBuffer.getContext("2d");
 		var bigdim = Math.max(Display.width, Display.height);
 		var grad = hc.createRadialGradient(
 			Display.width/2, 
@@ -73,10 +56,32 @@ class Display {
 		hc.fillRect(0,0,Display.width,Display.height);
 
 		//create haze over launch pad
-		Display.hazeSprite = new PIXI.Sprite(PIXI.Texture.fromCanvas(Display.hazeBuffer));
+		var tex = PIXI.Texture.fromCanvas(Display.hazeBuffer);
+		Display.hazeSprite = new PIXI.Sprite(tex);
+		tex.update();
+
 		Display.hazeSprite.position = {x: 0, y: 0};
 		Display.hazeSprite.blendMode = PIXI.blendModes.ADD;
 		Display.hazeSprite.alpha = 0.9;
+
+		//starfield init
+		Starfield.init(2000);
+		Display.stage.addChild(Starfield.gfx);
+
+		//particle init
+		Particle.init(400);
+		Display.stage.addChild(Particle.gfx);
+		
+		//used to render physics objects (for now)
+		Display.physicsGraphics = new PIXI.Graphics();
+		Display.stage.addChild(Display.hazeSprite);
+		Display.stage.addChild(Display.physicsGraphics);
+		
+		//add altimeter
+		Display.altim = new PIXI.Text("[alt]",{fontFamily : 'monospace', fontSize: 28, fill : 0xFFFFFF, align : 'center'});
+		Display.stage.addChild(Display.altim);
+
+		Builder.initUI();
 	}
 
 	/**

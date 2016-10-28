@@ -35,8 +35,7 @@ class Game {
 		var t0 = Date.now();
 		requestAnimationFrame(function gameLoop(){
 			var delta = (Date.now() - t0);
-			if (delta > 1000)
-				return;
+			delta = Math.min(500, delta);
 			Game.update(delta/(1000/GAME_FPS));
 			t0 = Date.now();
 			requestAnimationFrame(gameLoop);

@@ -11,18 +11,24 @@ class Builder {
 		Builder.gridHeight = 8;
 		Builder.invWidth = 1;
 		Builder.invHeight = 6;
-		Builder.inv = Builder.makeGrid(Builder.invWidth, Builder.invHeight);
-		Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 		Builder.typeSelected = Game.types[0];
 		Builder.builderList = [];
 		Builder.invList = [];
+		Builder.initUI();
+	}
+
+	/**
+	 * TODO: refactor
+	 */
+	static initUI() {
+		Builder.inv = Builder.makeGrid(Builder.invWidth, Builder.invHeight);
+		Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 
 		Display.gridContainer = new PIXI.Container();
 		Display.invContainer = new PIXI.Container();
 		var invSquareSize = 32;
 		var gridSquareSize = 40;
 		var margin = 8;
-
 
 		//making builder grid
 	 	for (var x=0; x<Builder.gridWidth; x++) {
@@ -81,7 +87,7 @@ class Builder {
 	 					Builder.typeSelected = Game.types[j]
 	 					for (var uu=0; uu<Builder.invList.length; uu++) {
 	 						var go = Builder.invList[uu];
-	 						if (o !== go)
+	 						if (o !== go && Game.types[uu])
 	 							go.tint = Game.types[uu].color;
 	 					}
 	 				};
@@ -201,7 +207,7 @@ class Builder {
 		Display.stage.addChild(reset_button);
 		Display.stage.addChild(text);
 
-
+		Builder.hide();
 	}
 
 	/**
