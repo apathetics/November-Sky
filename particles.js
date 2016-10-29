@@ -6,6 +6,7 @@ class Particle {
 		for (var i=0; i<n; i++)
 			Particle.makeParticle(0,0,0,0,0,0,0,0,0);
 		Particle.gfx = new PIXI.Graphics();
+		// Particle.gfx.blendMode = PIXI.BLEND_MODES.ADD;
 	}
 
 	static makeParticle(x,y,vx,vy,r,g,b,size,life) {
@@ -15,7 +16,9 @@ class Particle {
 			y: y,
 			vx: vx,
 			vy: vy,
-			col: (r<<16) | (g<<8) | r,
+			r: r,
+			g: g,
+			b: b,
 			t: 0,
 			size: size,
 			life: life
@@ -31,10 +34,15 @@ class Particle {
 			p.t++;
 			p.x += p.vx;	//increment position of x with velocity of x
 			p.y += p.vy;	//increment position of y with velocity of y
-			
+
 			//as particle gets older, its alpha decreases (particle fades)
-			Particle.gfx.beginFill(p.col, Math.max(0,1-p.t/p.life));
-			Particle.gfx.drawCircle(p.x - Display.view.x, p.y - Display.view.y, p.size);
+			var fader = Math.max(0,1-p.t/p.life);
+			var idxDiff = i - Particle.idx;
+			var modDiff = ((idxDiff % Particle.n) + Particle.n) % Particle.n;
+			fader = Math.min(fader, modDiff / Particle.n);
+			var col = ((p.r*fader)<<16) | ((p.g*fader)<<8) | (p.b*fader);
+			Particle.gfx.beginFill(col, fader);
+			Particle.gfx.drawRect(p.x - Display.view.x - p.size, p.y - Display.view.y - p.size, p.size*2, p.size*2);
 			Particle.gfx.endFill();
 		}
 	}

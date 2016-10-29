@@ -11,6 +11,7 @@ class Builder {
 		Builder.gridHeight = 8;
 		Builder.invWidth = 1;
 		Builder.invHeight = 6;
+		Builder.SIDE_LENGTH = 25;
 		Builder.typeSelected = Game.types[0];
 		Builder.builderList = [];
 		Builder.invList = [];
@@ -68,9 +69,9 @@ class Builder {
 	 	}
 
 	 	//making inv grid
-	 	for (var x=0; x<Builder.invWidth; x++) 
+	 	for (var x=0; x<Builder.invWidth; x++)
 	 	{
-	 		for (var y=0; y<Builder.invHeight; y++) 
+	 		for (var y=0; y<Builder.invHeight; y++)
 	 		{
 	 			var g = new PIXI.Graphics();
 	 			g.interactive = true;
@@ -306,7 +307,6 @@ class Builder {
 	static makeRocket() {
 
 		var empty = true;
-		var SIDE_LENGTH = 25;
 		var rocket = new Rocket();
 		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
 		//initialize parts != null with body and type
@@ -315,8 +315,8 @@ class Builder {
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
 					empty = false;
-					var obj = Bodies.rectangle(SIDE_LENGTH*x, SIDE_LENGTH*y,
-						SIDE_LENGTH, SIDE_LENGTH);
+					var obj = Bodies.rectangle(Builder.SIDE_LENGTH*x, Builder.SIDE_LENGTH*y,
+						Builder.SIDE_LENGTH, Builder.SIDE_LENGTH);
 					obj.color = parseInt(Builder.grid[x][y].color, 16);
 					list.push(obj);
 					var part = new Part(obj, Builder.grid[x][y]);
@@ -334,28 +334,9 @@ class Builder {
 		combined.color = 0x555555;
 		var width = combined.bounds.max.x - combined.bounds.min.x;
 		var height = combined.bounds.max.y - combined.bounds.min.y;
-		Body.translate(combined, Vector.create(-Builder.gridWidth/2*SIDE_LENGTH, -Builder.gridHeight*SIDE_LENGTH));
+		Body.translate(combined, Vector.create(-Builder.gridWidth/2*Builder.SIDE_LENGTH, -Builder.gridHeight*Builder.SIDE_LENGTH));
 		World.add(Game.engine.world, combined);
 		rocket.mainBody = combined;
-		//check for other blocks, constrain if != null
-		// for(var x = 0; x < temp.length-1; x++){
-		// 	for(var y = 0; y < temp[0].length-1; y++){
-		// 		if(temp[x][y] == null)
-		// 			continue;
-		// 		if(temp[x+1][y] !== null) {		//check right
-		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(-SIDE_LENGTH/2,-SIDE_LENGTH/2));
-		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(SIDE_LENGTH/2,SIDE_LENGTH/2));
-		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(-SIDE_LENGTH/2,SIDE_LENGTH/2));
-		// 			Builder.constrain(temp[x][y], temp[x+1][y], Vector.create(SIDE_LENGTH/2,-SIDE_LENGTH/2));
-		// 		}
-		// 		if(temp[x][y+1] !== null) {		//check down
-		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(-SIDE_LENGTH/2,-SIDE_LENGTH/2));
-		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(SIDE_LENGTH/2,SIDE_LENGTH/2));
-		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(-SIDE_LENGTH/2,SIDE_LENGTH/2));
-		// 			Builder.constrain(temp[x][y], temp[x][y+1], Vector.create(SIDE_LENGTH/2,-SIDE_LENGTH/2));
-		// 		}
-		// 	}
-		// }
 
 		Game.rocket = rocket; //make rocket global
 	}

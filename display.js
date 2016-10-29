@@ -39,11 +39,11 @@ class Display {
 		var hc = Display.hazeBuffer.getContext("2d");
 		var bigdim = Math.max(Display.width, Display.height);
 		var grad = hc.createRadialGradient(
-			Display.width/2, 
-			Display.height*5/4, 
-			bigdim * 0.1, 
-			Display.width/2, 
-			Display.height*5/4, 
+			Display.width/2,
+			Display.height*5/4,
+			bigdim * 0.1,
+			Display.width/2,
+			Display.height*5/4,
 			bigdim
 		);
 
@@ -65,18 +65,18 @@ class Display {
 		Display.hazeSprite.alpha = 0.9;
 
 		//starfield init
-		Starfield.init(2000);
+		Starfield.init(1800);
 		Display.stage.addChild(Starfield.gfx);
 
 		//particle init
-		Particle.init(400);
+		Particle.init(600);
 		Display.stage.addChild(Particle.gfx);
-		
+
 		//used to render physics objects (for now)
 		Display.physicsGraphics = new PIXI.Graphics();
 		Display.stage.addChild(Display.hazeSprite);
 		Display.stage.addChild(Display.physicsGraphics);
-		
+
 		//add altimeter
 		Display.altim = new PIXI.Text("[alt]",{fontFamily : 'monospace', fontSize: 28, fill : 0xFFFFFF, align : 'center'});
 		Display.stage.addChild(Display.altim);
@@ -115,7 +115,6 @@ class Display {
 		var renderPart = function(part) {
 			var vertices = part.vertices;
 
-			//TODO: custom color per part
 			pgfx.beginFill(part.color, 0.6);
 			pgfx.lineStyle(1, part.color);
 
@@ -131,7 +130,7 @@ class Display {
 				if(body.color != Game.invisible){
 					body.parts.forEach(function(part){
 						renderPart(part);
-				})
+					});
 				}
 			}
 			else{
@@ -140,17 +139,14 @@ class Display {
 			}
 		});
 
+		//render constraints
 		var constraints = Composite.allConstraints(Game.engine.world);
 		constraints.forEach(function(constraint) {
-			//TODO: custom color per constraint
-			// pgfx.beginFill(0xFF0000, 1);
 			pgfx.lineStyle(2, 0x00FF00);
 
 			//create polygon out of all vectors of this constraint
 			pgfx.moveTo(constraint.bodyA.position.x, constraint.bodyA.position.y);
 			pgfx.lineTo(constraint.bodyB.position.x, constraint.bodyB.position.y);
-
-			// pgfx.endFill();
 		});
 
 		Display.renderer.render(Display.stage);
