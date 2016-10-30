@@ -113,6 +113,9 @@ class Display {
 		//iterate through all physics bodies
 		var bodies = Composite.allBodies(Game.engine.world);
 		var renderPart = function(part) {
+			if (part.color === Game.INVISIBLE)
+				return;
+			
 			var vertices = part.vertices;
 
 			pgfx.beginFill(part.color, 0.6);
@@ -127,15 +130,12 @@ class Display {
 		}
 		bodies.forEach(function(body) {
 			if (body.parts.length > 1) {
-				if(body.color != Game.invisible){
-					body.parts.forEach(function(part){
-						renderPart(part);
-					});
-				}
+				body.parts.forEach(function(part){
+					renderPart(part);
+				});
 			}
 			else{
-				if(body.color != Game.invisible)
-					renderPart(body.parts[0]);
+				renderPart(body.parts[0]);
 			}
 		});
 

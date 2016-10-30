@@ -1,12 +1,13 @@
 // module aliases
 var Engine = Matter.Engine,
-Render = Matter.Render,
-World = Matter.World,
-Composite = Matter.Composite,
-Constraint = Matter.Constraint,
-Bodies = Matter.Bodies,
-Vector = Matter.Vector,
-Body = Matter.Body;
+	Render = Matter.Render,
+	World = Matter.World,
+	Composite = Matter.Composite,
+	Constraint = Matter.Constraint,
+	Bodies = Matter.Bodies,
+	Vector = Matter.Vector,
+	Vertices = Matter.Vertices,
+	Body = Matter.Body;
 
 var GAME_FPS = 60;
 var PLAY = 0,
@@ -16,11 +17,22 @@ var PLAY = 0,
 
 class Game {
 	static init() {
-		//initialize rendering
+		//initialize
 		Display.init();
 		Builder.init();
 		Editor.init();
 		Builder.hide();
+
+		//convert shape vertices to Vectors
+		Object.keys(Game.shapes).forEach(function(shape){
+			var i = 0;
+			Game.shapes[shape].forEach(function(vertex){
+				Game.shapes[shape][i++] = Vector.create(
+					vertex[0] * Builder.SIDE_LENGTH,
+					vertex[1] * Builder.SIDE_LENGTH
+				);
+			});
+		});
 
 		Game.wallRadius = 500;
 		Game.wallHeight = 5000;
@@ -49,7 +61,7 @@ class Game {
 		World.clear(Game.engine.world);
 
 		Game.black = 0x000000;
-		Game.invisible = 0x000001;
+		Game.INVISIBLE = -1;
 		//create physics bodies here
 		var ground = Bodies.rectangle(0, 30, 1500, 200, { isStatic: true });
 		Game.leftWall = Bodies.rectangle(-Game.wallRadius, 0, 200, Game.wallHeight*2, { isFloating: true, isStatic: false, inertia: Infinity});
@@ -59,8 +71,8 @@ class Game {
 			body.color = Game.black;
 		});*/
 		ground.color = Game.black;
-		Game.leftWall.color = Game.invisible;
-		Game.rightWall.color = Game.invisible;
+		Game.leftWall.color = Game.INVISIBLE;
+		Game.rightWall.color = Game.INVISIBLE;
 
 	    //obstacles
 	    Game.obstacles = [];

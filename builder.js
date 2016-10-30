@@ -10,7 +10,7 @@ class Builder {
 		Builder.gridWidth = 8;
 		Builder.gridHeight = 8;
 		Builder.invWidth = 1;
-		Builder.invHeight = 6;
+		Builder.invHeight = Game.types.length;
 		Builder.SIDE_LENGTH = 25;
 		Builder.typeSelected = Game.types[0];
 		Builder.builderList = [];
@@ -305,24 +305,46 @@ class Builder {
 	 * Add composite to game world.
 	 */
 	static makeRocket() {
-
 		var empty = true;
 		var rocket = new Rocket();
 		var temp = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
-		//initialize parts != null with body and type
 		var list = [];
+
+		//initialize parts != null with body and type
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
 				if(Builder.grid[x][y] !== null){	//if partType != null
 					empty = false;
-					var obj = Bodies.rectangle(Builder.SIDE_LENGTH*x, Builder.SIDE_LENGTH*y,
-						Builder.SIDE_LENGTH, Builder.SIDE_LENGTH);
+
+					//determine shape and create body
+					var shape = (Builder.grid[x][y].hasOwnProperty("shape")) ? Builder.grid[x][y].shape : "square";
+					var obj = Bodies.fromVertices(
+						Builder.SIDE_LENGTH*x,
+						Builder.SIDE_LENGTH*y,
+						Game.shapes[shape]
+					);
+
+					//manually un-translate by center of mass
+					// orient vertices around the centre of mass at origin (0, 0)
+			        var bounds = Matter.Bounds.create(obj.vertices);
+					var center = Vector.mult(Vector.add(bounds.min, bounds.max), 0.5);
+			        Vertices.translate(obj.vertices, center, -1);
+
+			        // update inertia while vertices are at origin (0, 0)
+			        Body.setInertia(obj, Body._inertiaScale * Vertices.inertia(obj.vertices, obj.mass));
+
+			        // update geometry
+			        Vertices.translate(obj.vertices, obj.position);
+			        Matter.Bounds.update(obj.bounds, obj.vertices, obj.velocity);
+
+					//set color for renderer
 					obj.color = parseInt(Builder.grid[x][y].color, 16);
+
+					//add part to rocket
 					list.push(obj);
 					var part = new Part(obj, Builder.grid[x][y]);
 					temp[x][y] = obj;
 					rocket.add(part);
-					// World.add(Game.engine.world, obj); //add obj to the world
 				}
 			}
 		}
@@ -331,7 +353,7 @@ class Builder {
 		var combined = Body.create({
 			parts: list
 		});
-		combined.color = 0x555555;
+		combined.color = Game.INVISIBLE;
 		var width = combined.bounds.max.x - combined.bounds.min.x;
 		var height = combined.bounds.max.y - combined.bounds.min.y;
 		Body.translate(combined, Vector.create(-Builder.gridWidth/2*Builder.SIDE_LENGTH, -Builder.gridHeight*Builder.SIDE_LENGTH));
@@ -351,5 +373,4 @@ class Builder {
 		});
 		World.add(Game.engine.world, newConstraint);
 	}
-
 }

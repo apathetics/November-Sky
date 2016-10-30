@@ -9,29 +9,50 @@
 			"name": "thruster",
 			"color": "0xFFAA00",
 			"behaviors": ["thrust"],
+			"shape": "engine",
 			"thrust": 0.005,
 			"gimbalRange": 0.5
 		},
-		
+
 		{
 			"name": "fuel-tank",
 			"color": "0x888888",
 			"capacity": 100
 		},
-		
+
 		{
 			"name": "hull-piece",
 			"color": "0xFFFFFF"
 		},
-		
+
 		{
 			"name": "nose",
-			"color": "0xFFFFFF"
+			"color": "0xFFFFFF",
+			"shape": "coneUp"
 		},
-		
+
 		{
-			"name": "fin",
-			"color": "0xFFFFFF"
+			"name": "finL",
+			"color": "0x88FFFF",
+			"shape": "finL"
+		},
+
+		{
+			"name": "finR",
+			"color": "0xFF88FF",
+			"shape": "finR"
+		},
+
+		{
+			"name": "junk",
+			"color": "0x000000"
 		}
-	]
+	],
+	"shapes": {
+		"square": [[0,0], [1,0], [1,1], [0,1]],
+		"engine": [[0,0], [1,0], [0.8,1], [0.2,1]],
+		"coneUp": [[0,1], [0.5,0], [1,1]],
+		"finL": [[1,0], [1,1], [0,1]],
+		"finR": [[0,0], [0,1], [1,1]]
+	}
 }
