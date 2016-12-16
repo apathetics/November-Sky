@@ -21,7 +21,7 @@ class Rocket {
 		//write "sensor" values
 		this.sensors.angle = this.mainBody.angle;
 		this.sensors.position = this.mainBody.position.x/Game.wallRadius;
-		this.sensors.altitude = this.mainBody.position.y;
+		this.sensors.altitude = Game.altitude();
 
 		//run user code
 		this.userLoop();
@@ -36,7 +36,7 @@ class Rocket {
 				part.gimbal = Math.min(1, Math.max(-1, that.controls.gimbal));
 			}
 		});
-		
+
 		for(var i=0; i<this.partContainer.length; i++) {
 			this.partContainer[i].update(dTime);
 		}

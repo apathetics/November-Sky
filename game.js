@@ -17,30 +17,29 @@ var PLAY = 0,
 
 class Game {
 	static init() {
-		//initialize
-		Display.init();
-		Builder.init();
-		Editor.init();
-		Builder.hide();
-
+		Game.SIDE_LENGTH = 25;
+		Game.wallRadius = 500;
+		Game.wallHeight = 5000;
+		Game.NUM_ASTEROIDS = 10;
+		
 		//convert shape vertices to Vectors
 		Object.keys(Game.shapes).forEach(function(shape){
 			var i = 0;
 			Game.shapes[shape].forEach(function(vertex){
 				Game.shapes[shape][i++] = Vector.create(
-					vertex[0] * Builder.SIDE_LENGTH,
-					vertex[1] * Builder.SIDE_LENGTH
+					vertex[0] * Game.SIDE_LENGTH,
+					vertex[1] * Game.SIDE_LENGTH
 				);
 			});
 		});
 
-		Game.wallRadius = 500;
-		Game.wallHeight = 5000;
-		Game.NUM_ASTEROIDS = 10;
+		//initialize
+		Display.init();
+		Editor.init();
+		Builder.hide();
 
 		//create physics engine
 		Game.engine = Engine.create();
-
 		Game.reset();
 
 		//start game loop
@@ -165,12 +164,9 @@ class Game {
 
 function createArray(w, h, val) {
 	var arr = [];
-
-	for (var x = 0; x<w; x++)
-	{
+	for (var x = 0; x<w; x++) {
 		arr[x] = [];
-		for(var y = 0; y<h; y++)
-		{
+		for(var y = 0; y<h; y++) {
 			arr[x][y] = val;
 		}
 	}

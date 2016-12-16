@@ -81,6 +81,7 @@ class Display {
 		Display.altim = new PIXI.Text("[alt]",{fontFamily : 'monospace', fontSize: 28, fill : 0xFFFFFF, align : 'center'});
 		Display.stage.addChild(Display.altim);
 
+		Builder.init();
 		Builder.initUI();
 	}
 
@@ -115,7 +116,7 @@ class Display {
 		var renderPart = function(part) {
 			if (part.color === Game.INVISIBLE)
 				return;
-			
+
 			var vertices = part.vertices;
 
 			pgfx.beginFill(part.color, 0.6);

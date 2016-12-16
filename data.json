@@ -1,28 +1,31 @@
 {
 	"types": [
 		{
+			"name": "empty",
+			"color": "0x000000",
+			"shape": "empty"
+		},
+
+		{
 			"name": "controller",
-			"color": "0x00AAFF"
+			"color": "0x00AAFF",
+			"shape": "square"
 		},
 
 		{
 			"name": "thruster",
-			"color": "0xFFAA00",
 			"behaviors": ["thrust"],
-			"shape": "engine",
+			"color": "0xFFAA00",
+			"gimbalRange": 0.5,
 			"thrust": 0.005,
-			"gimbalRange": 0.5
+			"shape": "engine"
 		},
 
 		{
 			"name": "fuel-tank",
+			"capacity": 100,
 			"color": "0x888888",
-			"capacity": 100
-		},
-
-		{
-			"name": "hull-piece",
-			"color": "0xFFFFFF"
+			"shape": "square"
 		},
 
 		{
@@ -45,11 +48,13 @@
 
 		{
 			"name": "junk",
-			"color": "0x000000"
+			"color": "0x000000",
+			"shape": "square"
 		}
 	],
 	"shapes": {
 		"square": [[0,0], [1,0], [1,1], [0,1]],
+		"empty": [[0.5,0.4], [0.6,0.5], [0.5,0.6], [0.4,0.5]],
 		"engine": [[0,0], [1,0], [0.8,1], [0.2,1]],
 		"coneUp": [[0,1], [0.5,0], [1,1]],
 		"finL": [[1,0], [1,1], [0,1]],

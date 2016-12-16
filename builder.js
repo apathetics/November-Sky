@@ -9,13 +9,99 @@ class Builder {
 	static init() {
 		Builder.gridWidth = 8;
 		Builder.gridHeight = 8;
+		Builder.buttonWidth = 140;
+		Builder.buttonHeight = 40;
+		Builder.marginX = 16;
+		Builder.marginY = 16;
+		Builder.gridSquareSize = 40;
+		Builder.gridMargin = 8;
 		Builder.invWidth = 1;
 		Builder.invHeight = Game.types.length;
-		Builder.SIDE_LENGTH = 25;
-		Builder.typeSelected = Game.types[0];
+		Builder.TYPE_NONE = Game.types[0];
+		Builder.typeSelected = Builder.TYPE_NONE;
 		Builder.builderList = [];
 		Builder.invList = [];
-		Builder.initUI();
+		Builder.gridGfxList = [];
+
+		Builder.buttonData = [
+			{
+				label: "launch",
+				color: 0xff4d4d,
+				action: function(){
+					Builder.makeRocket();
+					Builder.hide();
+				}
+			},
+			{
+				label: "build",
+				color: 0xffcc00,
+				action: function(){
+					Builder.show();
+				}
+			},
+			{
+				label: "hide",
+				color: 0x00b359,
+				action: function(){
+					Builder.hide();
+				}
+			},
+			{
+				label: "program",
+				color: 0x3399ff,
+				action: function(){
+					Builder.hide();
+					Editor.show();
+				}
+			},
+			{
+				label: "reset",
+				color: 0xaa80ff,
+				action: function(){
+					Builder.reset();
+				}
+			}
+		];
+	}
+
+	static makeCell(x, y, action, container, list) {
+		var g = new PIXI.Graphics();
+		g.interactive = true;
+		g.redrawIcon = function(shape, color) {
+			g.clear();
+			g.beginFill(color, 1);
+			Builder.drawShape(
+				g, shape,
+				x*Builder.gridSquareSize + (x+0.5)*Builder.gridMargin,
+				y*Builder.gridSquareSize + (y+0.5)*Builder.gridMargin,
+				Builder.gridSquareSize,
+				Builder.gridSquareSize
+			);
+			g.endFill();
+		};
+
+		action = action.bind(this, g, x, y);
+		g.on("mousedown", action);
+		g.on("touchstart", action);
+		action();
+		g.action = action;
+
+		var back = new PIXI.Graphics();
+		back.beginFill(0xFFFFFF, 0.4);
+		back.lineStyle(1, 0xFFFFFF);
+		back.drawRect(
+			x*(Builder.gridSquareSize + Builder.gridMargin),
+			y*(Builder.gridSquareSize + Builder.gridMargin),
+			Builder.gridSquareSize + Builder.gridMargin - 1,
+			Builder.gridSquareSize + Builder.gridMargin - 1
+		);
+		back.endFill();
+		back.tint = 0x101010;
+
+		container.addChild(back);
+		container.addChild(g);
+		list.push(g);
+		return g;
 	}
 
 	/**
@@ -27,188 +113,97 @@ class Builder {
 
 		Display.gridContainer = new PIXI.Container();
 		Display.invContainer = new PIXI.Container();
-		var invSquareSize = 32;
-		var gridSquareSize = 40;
-		var margin = 8;
 
-		//making builder grid
-	 	for (var x=0; x<Builder.gridWidth; x++) {
-	 		for (var y=0; y<Builder.gridHeight; y++) {
-	 			var g = new PIXI.Graphics();
-	 			g.interactive = true;
-
-	 			(function()
-	 			{
-	 				var o = g;
-	 				var i = x;
-	 				var j = y;
-
-	 				Builder.builderList.push(o);
-
-	 				o.on('mousedown', function()
-	 				{
-	 					o.tint = Builder.typeSelected.color;
-	 					Builder.gridCellClicked(i, j);
-
-	 				});
-	 				o.on('touchstart', function()
-	 				{
-	 					o.tint = Builder.typeSelected.color;
-	 					Builder.gridCellClicked(i, j);
-	 				});
-
-	 			})();
-	 			g.beginFill(0xFFFFFF, 1);
-	 			g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
-	 			g.endFill();
-	 			g.tint = 0x222222;
-
-
-	 			Display.gridContainer.addChild(g);
+		//make builder grid
+		var uid = 0;
+		var gridHandler = function(gfx, x, y, shape, color) {
+			gfx.redrawIcon(shape, color);
+			Builder.gridCellClicked(x,y);
+		};
+		for (var y=0; y<Builder.gridHeight; y++) {
+	 		for (var x=0; x<Builder.gridWidth; x++) {
+	 			var handler = function(gfx, x, y){
+	 				gridHandler(gfx, x, y, Builder.typeSelected.shape, Builder.typeSelected.color);
+	 			};
+	 			var cell = Builder.makeCell(x, y, handler, Display.gridContainer, Builder.gridGfxList);
 	 		}
 	 	}
 
-	 	//making inv grid
-	 	for (var x=0; x<Builder.invWidth; x++)
-	 	{
-	 		for (var y=0; y<Builder.invHeight; y++)
-	 		{
-	 			var g = new PIXI.Graphics();
-	 			g.interactive = true;
-
-	 			(function()
-	 			{
-	 				var o = g;
-	 				var i = x;
-	 				var j = y;
-
-	 				Builder.invList.push(o);
-	 				var handler = function() {
-	 					o.tint = Game.types[j].color;
-	 					Builder.typeSelected = Game.types[j]
-	 					for (var uu=0; uu<Builder.invList.length; uu++) {
-	 						var go = Builder.invList[uu];
-	 						if (o !== go && Game.types[uu])
-	 							go.tint = Game.types[uu].color;
-	 					}
-	 				};
-	 				o.on('mousedown', handler);
-	 				o.on('touchstart', handler);
-	 				handler();
-
-	 			})();
-
-	 			g.beginFill(0xFFFFFF, 1);
-	 			g.drawRect(x*gridSquareSize + x*margin, y*gridSquareSize + y*margin, gridSquareSize, gridSquareSize);
-	 			g.endFill();
-	 			g.tint = 0x676798;
-
-	 			Display.invContainer.addChild(g);
-	 		}
+	 	//make inventory grid
+	 	var invHandler = function(idx) {
+	 		Builder.typeSelected = Game.types[idx];
 	 	}
-		var bw = 140;
-		var bh = 40;
-		var marginX = 16;
-		var marginY = 16;
-		var y = (28-marginY)/bh;
+	 	for (var i=0; i<Game.types.length; i++) {
+	 		var y = i%Builder.gridHeight;
+	 		var x = Math.floor(i/Builder.gridHeight);
+	 		var cell = Builder.makeCell(
+	 			x, y,
+	 			invHandler.bind(this, i), 
+	 			Display.invContainer, Builder.invList
+	 		);
+	 		cell.redrawIcon(Game.types[i].shape, parseInt(Game.types[i].color, 16));
+	 	}
 
-	 	Display.invContainer.x = Display.width - Display.gridContainer.width - bw - marginX*2 - 64;
+	 	Display.invContainer.x = Display.width - Display.gridContainer.width - Builder.buttonWidth - Builder.marginX*2 - 64;
 	 	Display.invContainer.y = Display.length + 30;
 	 	Display.stage.addChild(Display.invContainer);
-	 	Display.gridContainer.x = Display.width - Display.gridContainer.width - bw - marginX*2;
+	 	Display.gridContainer.x = Display.width - Display.gridContainer.width - Builder.buttonWidth - Builder.marginX*2;
 	 	Display.gridContainer.y = Display.length + 30;
 
 	 	Display.stage.addChild(Display.gridContainer);
-
-		//make a button for make_rocket()
-		var makeRocket_button = new PIXI.Graphics();
-		makeRocket_button.interactive = true;
-
-
-		makeRocket_button.beginFill(0xff4d4d, 1);
-		makeRocket_button.lineStyle(4, 0x9494b8, 1);
-		makeRocket_button.drawRoundedRect(0, 0, bw, bh, 5);
-		makeRocket_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
-		makeRocket_button.endFill();
-		makeRocket_button.on('mousedown', Builder.makeRocket);
-		makeRocket_button.on('touchstart', Builder.makeRocket);
-		makeRocket_button.on('mousedown', Builder.hide);
-		makeRocket_button.on('touchstart', Builder.hide);
-
-		var text = new PIXI.Text('launch',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
-		text.position = {x: makeRocket_button.position.x+8, y: makeRocket_button.position.y+8};
-		Display.stage.addChild(makeRocket_button);
-		Display.stage.addChild(text);
-
-		//make a button for show()
-		var makeShow_button = new PIXI.Graphics();
-		makeShow_button.interactive = true;
-		makeShow_button.beginFill(0xffcc00,1);
-		makeShow_button.lineStyle(4, 0xc2c2d6, 1);
-		makeShow_button.drawRoundedRect(0, 0, bw, bh, 5);
-		makeShow_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
-		makeShow_button.endFill();
-		makeShow_button.on('mousedown', Builder.show);
-		makeShow_button.on('touchstart', Builder.show);
-
-		var text = new PIXI.Text('build',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
-		text.position = {x: makeShow_button.position.x+8, y: makeShow_button.position.y+8};
-		Display.stage.addChild(makeShow_button);
-		Display.stage.addChild(text);
-
-		//make a button for hide()
-		var makeHide_button = new PIXI.Graphics();
-		makeHide_button.interactive = true;
-
-		makeHide_button.beginFill(0x00b359,1);
-		makeHide_button.lineStyle(4, 0xc2c2d6, 1);
-		makeHide_button.drawRoundedRect(0, 0, bw, bh, 5);
-		makeHide_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
-		makeHide_button.endFill();
-		makeHide_button.on('mousedown', Builder.hide);
-		makeHide_button.on('touchstart', Builder.hide);
-
-		var text = new PIXI.Text('close',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
-		text.position = {x: makeHide_button.position.x+8, y: makeHide_button.position.y+8};
-		Display.stage.addChild(makeHide_button);
-		Display.stage.addChild(text);
-
-		//make a button for code()
-		var makeCode_button = new PIXI.Graphics();
-		makeCode_button.interactive = true;
-
-		makeCode_button.beginFill(0x3399ff,1);
-		makeCode_button.lineStyle(4, 0xc2c2d6, 1);
-		makeCode_button.drawRoundedRect(0, 0, bw, bh, 5);
-		makeCode_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
-		makeCode_button.endFill();
-		makeCode_button.on('mousedown', Builder.hide);
-		makeCode_button.on('touchstart', Builder.hide);
-		makeCode_button.on('mousedown', Editor.show);
-		makeCode_button.on('touchstart', Editor.show);
-
-		var text = new PIXI.Text('program',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
-		text.position = {x: makeCode_button.position.x+8, y: makeCode_button.position.y+8};
-		Display.stage.addChild(makeCode_button);
-		Display.stage.addChild(text);
-
-		//make a button for reset()
-		var reset_button = new PIXI.Graphics();
-		reset_button.interactive = true;
-		reset_button.beginFill(0xaa80ff,1);
-		reset_button.lineStyle(4, 0xc2c2d6, 1);
-		reset_button.drawRoundedRect(0, 0, bw, bh, 5);
-		reset_button.position = {x: Display.width-bw-marginX, y: (y++)*bh+y*marginY};
-		reset_button.endFill();
-		reset_button.on('mousedown', Builder.reset);
-		reset_button.on('touchstart', Builder.reset);
-
-		var text = new PIXI.Text('reset',{fontFamily : 'monospace', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
-		text.position = {x: reset_button.position.x+8, y: reset_button.position.y+8};
-		Display.stage.addChild(reset_button);
-		Display.stage.addChild(text);
-
+		Builder.initMenu();
+		Builder.resetGrid();
 		Builder.hide();
+	}
+
+	static initMenu() {
+		var y = (28-Builder.marginY)/Builder.buttonHeight;
+
+		Builder.buttonData.forEach(function(item){
+			var button = new PIXI.Graphics();
+			button.interactive = true;
+
+			//create button
+			button.beginFill(item.color, 0.5);
+			button.lineStyle(1, item.color, 1);
+			button.drawRoundedRect(0, 0, Builder.buttonWidth, Builder.buttonHeight, 5);
+			button.position = {
+				x: Display.width-Builder.buttonWidth-Builder.marginX,
+				y: (y++)*Builder.buttonHeight+y*Builder.marginY
+			};
+			button.endFill();
+			button.on('mousedown', item.action);
+			button.on('touchstart', item.action);
+
+			//create label
+			var text = new PIXI.Text(item.label, {
+				fontFamily : 'monospace',
+				fontSize: 24,
+				fill : 0xFFFFFF,
+				align : 'center'
+			});
+			text.position = {x: button.position.x+8, y: button.position.y+8};
+			Display.stage.addChild(button);
+			Display.stage.addChild(text);
+		});
+	}
+
+	static drawShape(graphics, shape, x, y, w, h) {
+		var vertices = Game.shapes[shape];
+		for (var i=0; i<vertices.length; i++) {
+			var vertex = vertices[i];
+			if (i===0)
+				graphics.moveTo(
+					vertex.x * (w/Game.SIDE_LENGTH) + x,
+					vertex.y * (h/Game.SIDE_LENGTH) + y
+				);
+			else
+				graphics.lineTo(
+					vertex.x * (w/Game.SIDE_LENGTH) + x,
+					vertex.y * (h/Game.SIDE_LENGTH) + y
+				);
+		}
+		graphics.hitArea = new PIXI.Rectangle(x,y,w,h);
 	}
 
 	/**
@@ -232,30 +227,17 @@ class Builder {
 	 * Reset the selected grids
 	 */
 	 static reset(){
-	 	Builder.builder_grid();
-	 	Builder.inv_grid();
+	 	Builder.resetGrid();
 	 	Builder.typeSelected = Game.types[0];
 	 	Game.reset();
 	 }
 
-	 static builder_grid()
-	 {
-	 	for(var k = 0; k<Builder.builderList.length; k++)
-	 	{
-	 		Builder.builderList[k].tint = 0x222222;
-	 	}
-
+	 static resetGrid() {
+	 	Builder.typeSelected = Builder.TYPE_NONE;
+	 	Builder.gridGfxList.forEach(function(gfx){
+	 		gfx.action();
+	 	});
 	 	Builder.grid = Builder.makeGrid(Builder.gridWidth, Builder.gridHeight);
-	 }
-
-	 static inv_grid()
-	 {
-	 	for(var k = 0; k<Builder.invList.length; k++)
-	 	{
-	 		Builder.invList[k].tint = 0x676798;
-	 	}
-
-	 	Builder.inv = Builder.makeGrid(Builder.invWidth, Builder.invHeight);
 	 }
 
 	/**
@@ -264,17 +246,14 @@ class Builder {
 	 * @param h height
 	 */
 	static makeGrid(w, h) {
-
-		return createArray(w, h, null);
+		return createArray(w, h, Builder.TYPE_NONE);
 	}
-
 
 	/**
 	 * Handles a click on a part type in the inventory.
 	 * Set currently selected type.
 	 */
 	static typeClicked(x, y) {
-
 		Builder.inv[x][y] = Builder.typeSelected;
 	}
 
@@ -284,17 +263,12 @@ class Builder {
 	 * Update displayed sprite for that position.
 	 */
 	static gridCellClicked(x, y) {
-		//handles click first?
-		//click
 		Builder.grid[x][y] =  Builder.typeSelected;
-
 	}
 
-	static reset_gridCellClicked(x, y) {
-		//handles click first?
-		//click
-		Builder.grid[x][y] =  null;
-
+	static gridCellReset(x, y) {
+		Builder.typeSelected = Builder.TYPE_NONE;
+		Builder.grid[x][y].click();
 	}
 
 	/**
@@ -313,14 +287,14 @@ class Builder {
 		//initialize parts != null with body and type
 		for (var x=0; x<Builder.gridWidth; x++){
 			for (var y=0; y<Builder.gridHeight; y++){
-				if(Builder.grid[x][y] !== null){	//if partType != null
+				if(Builder.grid[x][y] !== Builder.TYPE_NONE){	//if partType != null
 					empty = false;
 
 					//determine shape and create body
-					var shape = (Builder.grid[x][y].hasOwnProperty("shape")) ? Builder.grid[x][y].shape : "square";
+					var shape = Builder.grid[x][y].shape;
 					var obj = Bodies.fromVertices(
-						Builder.SIDE_LENGTH*x,
-						Builder.SIDE_LENGTH*y,
+						Game.SIDE_LENGTH*x,
+						Game.SIDE_LENGTH*y,
 						Game.shapes[shape]
 					);
 
@@ -356,7 +330,7 @@ class Builder {
 		combined.color = Game.INVISIBLE;
 		var width = combined.bounds.max.x - combined.bounds.min.x;
 		var height = combined.bounds.max.y - combined.bounds.min.y;
-		Body.translate(combined, Vector.create(-Builder.gridWidth/2*Builder.SIDE_LENGTH, -Builder.gridHeight*Builder.SIDE_LENGTH));
+		Body.translate(combined, Vector.create(-Builder.gridWidth/2*Game.SIDE_LENGTH, -Builder.gridHeight*Game.SIDE_LENGTH));
 		World.add(Game.engine.world, combined);
 		rocket.mainBody = combined;
 
@@ -364,7 +338,6 @@ class Builder {
 	}
 
 	static constrain(body1, body2, offset){
-		console.log("something");
 		var newConstraint = Constraint.create({
 			bodyA: body1,
 			positionA: offset,

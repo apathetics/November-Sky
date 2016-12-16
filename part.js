@@ -23,7 +23,7 @@ class Part {
 			);
 
 			f = Vector.mult(f, 3000);
-			var side = Builder.SIDE_LENGTH;
+			var side = Game.SIDE_LENGTH;
 			var angle = this.body.parent.angle + Math.PI * 0.5;
 
 			//how far has the rocket moved?
