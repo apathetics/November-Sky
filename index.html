@@ -21,14 +21,23 @@
 
 </div>
 <div id="coding">
-	<div style="padding-left: 16px;">
-	<h1 style="color:white; font-family: monospace;">Usable data</h1>
-	<ul style="color:white; font-family: monospace;">
-		<li>controls.thrust (value from (0, 100)%)</li>
-		<li>controls.gimbal (value from (-1.0, 1.0))</li>
-		<li>sensors.altitude (current vertical y position)</li>
-		<li>sensors.position (current horizontal x position (-1.0, 1.0)</li>
-		<li>sensors.angle (current angle in radians; vertical is 0, left is negative, right is positive)</li>
+	<div style="padding-left: 16px; color:white; font-family: monospace;">
+	<h1>Rocket API:</h1>
+	<h2>controls</h2>
+	<ul>
+		<li>controls.thrust - thrust percentage; value from 0 to 100</li>
+		<li>controls.gimbal - thrust angle; value from -1 (left) to 1 (right)</li>
+	</ul>
+	<h2>sensors</h2>
+	<ul>
+		<li>sensors.altitude - current altitude</li>
+		<li>sensors.position - current horizontal position (negative is left of center, vice versa)</li>
+		<li>sensors.angle - angle in radians (0 is up, negative is left, positive is right)</li>
+	</ul>
+	<h2>input (not available in all scenarios)</h2>
+	<ul>
+		<li>input.keys - boolean array of keypress states (e.g. if (input.keys[KEY.LEFT]) {...})</li>
+		<li>KEY - key code constants (KEY.LEFT, KEY.RIGHT, KEY.UP, KEY.DOWN)</li>
 	</ul>
 	</div>
 	<button type="button" onclick="Editor.perform(Editor.text_area.value)" id="submit">Submit</button>

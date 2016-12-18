@@ -7,14 +7,14 @@ class Builder {
 	 * Create grid cells and make clickable
 	 */
 	static init() {
-		Builder.gridWidth = 8;
-		Builder.gridHeight = 8;
+		Builder.gridWidth = 9;
+		Builder.gridHeight = 9;
 		Builder.buttonWidth = 140;
 		Builder.buttonHeight = 40;
 		Builder.marginX = 16;
 		Builder.marginY = 16;
 		Builder.gridSquareSize = 40;
-		Builder.gridMargin = 8;
+		Builder.gridMargin = 12;
 		Builder.invWidth = 1;
 		Builder.invHeight = Game.types.length;
 		Builder.TYPE_NONE = Game.types[0];
@@ -69,7 +69,8 @@ class Builder {
 		g.interactive = true;
 		g.redrawIcon = function(shape, color) {
 			g.clear();
-			g.beginFill(color, 1);
+			g.beginFill(color, 0.5);
+			g.lineStyle(2, color, 1);
 			Builder.drawShape(
 				g, shape,
 				x*Builder.gridSquareSize + (x+0.5)*Builder.gridMargin,
@@ -97,6 +98,12 @@ class Builder {
 		);
 		back.endFill();
 		back.tint = 0x101010;
+
+		back.interactive = true;
+		Display.addHoverFade(back, "alpha", 0.2, function(val){
+			var scaled = (val * 0.4 + 0.6);
+			return scaled;
+		});
 
 		container.addChild(back);
 		container.addChild(g);
@@ -135,7 +142,7 @@ class Builder {
 	 	}
 	 	for (var i=0; i<Game.types.length; i++) {
 	 		var y = i%Builder.gridHeight;
-	 		var x = Math.floor(i/Builder.gridHeight);
+	 		var x = -Math.floor(i/Builder.gridHeight);
 	 		var cell = Builder.makeCell(
 	 			x, y,
 	 			invHandler.bind(this, i), 
@@ -175,6 +182,12 @@ class Builder {
 			button.on('mousedown', item.action);
 			button.on('touchstart', item.action);
 
+			//fade
+			Display.addHoverFade(button, "tint", 0.2, function(val){
+				var scaled = (val * 0.4 + 0.6) * 255;
+				return (scaled << 16) | (scaled << 8) | scaled;
+			});
+
 			//create label
 			var text = new PIXI.Text(item.label, {
 				fontFamily : 'monospace',
@@ -190,18 +203,16 @@ class Builder {
 
 	static drawShape(graphics, shape, x, y, w, h) {
 		var vertices = Game.shapes[shape];
+		graphics.moveTo(
+			vertices[vertices.length-1].x * (w/Game.SIDE_LENGTH) + x,
+			vertices[vertices.length-1].y * (h/Game.SIDE_LENGTH) + y
+		);
 		for (var i=0; i<vertices.length; i++) {
 			var vertex = vertices[i];
-			if (i===0)
-				graphics.moveTo(
-					vertex.x * (w/Game.SIDE_LENGTH) + x,
-					vertex.y * (h/Game.SIDE_LENGTH) + y
-				);
-			else
-				graphics.lineTo(
-					vertex.x * (w/Game.SIDE_LENGTH) + x,
-					vertex.y * (h/Game.SIDE_LENGTH) + y
-				);
+			graphics.lineTo(
+				vertex.x * (w/Game.SIDE_LENGTH) + x,
+				vertex.y * (h/Game.SIDE_LENGTH) + y
+			);
 		}
 		graphics.hitArea = new PIXI.Rectangle(x,y,w,h);
 	}
@@ -301,7 +312,7 @@ class Builder {
 					//manually un-translate by center of mass
 					// orient vertices around the centre of mass at origin (0, 0)
 			        var bounds = Matter.Bounds.create(obj.vertices);
-					var center = Vector.mult(Vector.add(bounds.min, bounds.max), 0.5);
+					var center = Vector.mult(Vector.add(bounds.min, Vector.add(bounds.min, Vector.create(Game.SIDE_LENGTH, Game.SIDE_LENGTH))), 0.5);
 			        Vertices.translate(obj.vertices, center, -1);
 
 			        // update inertia while vertices are at origin (0, 0)

@@ -11,7 +11,9 @@ class Display {
 
 		//Create the renderer
 		Display.renderer = PIXI.autoDetectRenderer(Display.width, Display.height, {
-			view: Display.canvas
+			view: Display.canvas,
+			interactionFrequency: 60,
+			antialias: true
 		});
 
 		Display.rebuild();
@@ -151,5 +153,38 @@ class Display {
 		});
 
 		Display.renderer.render(Display.stage);
+	}
+
+	static addHoverFade(gfx, prop, duration, func) {
+		var locked = false;
+		var active = false;
+		var t0 = Date.now();
+
+		gfx.on("mouseover", function(){
+			locked = true;
+		});
+		gfx.on("mouseout", function(){
+			t0 = Date.now();
+			locked = false;
+			active = true;
+		});
+
+		//dirty ;)
+		Object.defineProperty(gfx, prop, {
+			get: function() {
+				if (locked)
+					return func(1);
+				if (!active)
+					return func(0);
+
+				var val = (Date.now() - t0) / 1000 / duration;
+				if (val >= 1) {
+					active = false;
+					val = 1;
+				}
+				return func(1-val);
+			},
+			set: function(val) {}
+		});
 	}
 }

@@ -7,56 +7,84 @@
 		},
 
 		{
-			"name": "controller",
+			"name": "Controller",
 			"color": "0x00AAFF",
 			"shape": "square"
 		},
 
 		{
-			"name": "thruster",
+			"name": "Big Thruster",
 			"behaviors": ["thrust"],
 			"color": "0xFFAA00",
-			"gimbalRange": 0.5,
+			"gimbalRange": 0.3,
 			"thrust": 0.005,
 			"shape": "engine"
 		},
 
 		{
-			"name": "fuel-tank",
+			"name": "Little Thruster",
+			"behaviors": ["thrust"],
+			"color": "0xFF6000",
+			"gimbalRange": 0.76,
+			"thrust": 0.0015,
+			"shape": "engineSm"
+		},
+
+		{
+			"name": "SRB",
+			"behaviors": ["thrust"],
+			"color": "0xDDDDDD",
+			"gimbalRange": 0.01,
+			"thrust": 0.009,
+			"shape": "engineLg"
+		},
+
+		{
+			"name": "Fuel Tank",
 			"capacity": 100,
 			"color": "0x888888",
 			"shape": "square"
 		},
 
 		{
-			"name": "nose",
-			"color": "0xFFFFFF",
+			"name": "Horizontal Strut",
+			"color": "0x202020",
+			"shape": "hstrut"
+		},
+
+		{
+			"name": "Nosecone 1",
+			"color": "0xF5F5F5",
 			"shape": "coneUp"
 		},
 
 		{
-			"name": "finL",
-			"color": "0x88FFFF",
+			"name": "Nosecone 2",
+			"color": "0xF5F5F5",
+			"shape": "coneUp2"
+		},
+
+		{
+			"name": "Fin Left",
+			"color": "0xC0C0C0",
 			"shape": "finL"
 		},
 
 		{
-			"name": "finR",
-			"color": "0xFF88FF",
+			"name": "Fin Right",
+			"color": "0xC0C0C0",
 			"shape": "finR"
-		},
-
-		{
-			"name": "junk",
-			"color": "0x000000",
-			"shape": "square"
 		}
 	],
 	"shapes": {
-		"square": [[0,0], [1,0], [1,1], [0,1]],
 		"empty": [[0.5,0.4], [0.6,0.5], [0.5,0.6], [0.4,0.5]],
+		"square": [[0,0], [1,0], [1,1], [0,1]],
+		"hstrut": [[0,0.45], [1,0.45], [1,0.55], [0,0.55]],
 		"engine": [[0,0], [1,0], [0.8,1], [0.2,1]],
+		"engineSm": [[0,0], [1,0], [0.9,0.7], [0.7, 0.8], [0.3, 0.8], [0.1,0.7]],
+		"engineLg": [[0,0], [1,0], [0.9,0.9], [0.1,0.9]],
 		"coneUp": [[0,1], [0.5,0], [1,1]],
+		"coneUp2": [[0,1], [0.15,0.3], [0.35, 0.05], [0.5,0], [0.65, 0.05], [0.85,0.3], [1,1]],
 		"finL": [[1,0], [1,1], [0,1]],
 		"finR": [[0,0], [0,1], [1,1]]
 	}

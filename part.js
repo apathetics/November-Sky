@@ -22,6 +22,7 @@ class Part {
 				f
 			);
 
+			//everything below this is solely to create particle effects
 			f = Vector.mult(f, 3000);
 			var side = Game.SIDE_LENGTH;
 			var angle = this.body.parent.angle + Math.PI * 0.5;

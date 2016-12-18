@@ -9,6 +9,7 @@ class Rocket {
 			gimbal: 0
 		};
 		this.sensors = {};
+		this.input = {};
 	}
 
 	add(part) {
@@ -17,11 +18,21 @@ class Rocket {
 	}
 
 	update(dTime) {
-
 		//write "sensor" values
 		this.sensors.angle = this.mainBody.angle;
 		this.sensors.position = this.mainBody.position.x/Game.wallRadius;
 		this.sensors.altitude = Game.altitude();
+
+		//write input values
+		Object.keys(Game.input).forEach(function(key){
+			if (Game.input[key] instanceof Array) {
+				this.input[key] = [];
+				for (var i=0; i<Game.input[key].length; i++)
+					this.input[key].push(Game.input[key][i]);
+				return;
+			}
+			this.input[key] = Game.input[key];
+		}.bind(this));
 
 		//run user code
 		this.userLoop();

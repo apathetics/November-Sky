@@ -21,6 +21,16 @@ class Game {
 		Game.wallRadius = 500;
 		Game.wallHeight = 5000;
 		Game.NUM_ASTEROIDS = 10;
+		Game.input = {
+			keys: []
+		};
+		Game.KEY = {
+			LEFT: 37,
+			RIGHT: 39,
+			UP: 38,
+			DOWN: 40
+		};
+		Object.seal(Game.KEY);
 		
 		//convert shape vertices to Vectors
 		Object.keys(Game.shapes).forEach(function(shape){
@@ -41,6 +51,14 @@ class Game {
 		//create physics engine
 		Game.engine = Engine.create();
 		Game.reset();
+
+		//add some input listeners
+		document.addEventListener("keydown", function(event){
+			Game.input.keys[event.keyCode] = true;
+		}, false);
+		document.addEventListener("keyup", function(event){
+			Game.input.keys[event.keyCode] = false;
+		}, false);
 
 		//start game loop
 		var t0 = Date.now();
@@ -65,7 +83,7 @@ class Game {
 		var ground = Bodies.rectangle(0, 30, 1500, 200, { isStatic: true });
 		Game.leftWall = Bodies.rectangle(-Game.wallRadius, 0, 200, Game.wallHeight*2, { isFloating: true, isStatic: false, inertia: Infinity});
 		Game.rightWall = Bodies.rectangle(Game.wallRadius, 0, 200, Game.wallHeight*2, { isFloating: true, isStatic: false, inertia: Infinity});
-		var staticBodyArray = [ground, Game.leftWall, Game.rightWall];
+		var staticBodyArray = [ground];
 		/*staticBodyArray.forEach(function(body){
 			body.color = Game.black;
 		});*/
@@ -141,11 +159,10 @@ class Game {
 		//update rocket
 		if (Game.rocket instanceof Rocket) {
 			Game.rocket.update(timeDelta);
-			var aabb = Game.rocket.mainBody.bounds;
-			var midX = (aabb.max.x + aabb.min.x) / 2;
-			var midY = (aabb.max.y + aabb.min.y) / 2;
-			Display.view.x = midX - Display.width / 2;
-			Display.view.y = midY - Display.height / 2;
+			var focusX = Game.rocket.mainBody.position.x;
+			var focusY = Game.rocket.mainBody.position.y;
+			Display.view.x = focusX - Display.width / 2;
+			Display.view.y = focusY - Display.height / 2;
 			Game.updateObstacles();
 			Game.updateWalls(timeDelta);
 		}
