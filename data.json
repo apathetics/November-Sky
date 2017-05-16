@@ -54,12 +54,14 @@
 
 		{
 			"name": "Nosecone 1",
+			"behaviors": ["scan"],
 			"color": "0xF5F5F5",
 			"shape": "coneUp"
 		},
 
 		{
 			"name": "Nosecone 2",
+			"behaviors": ["scan"],
 			"color": "0xF5F5F5",
 			"shape": "coneUp2"
 		},

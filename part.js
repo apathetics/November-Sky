@@ -49,5 +49,40 @@ class Part {
 				);
 			}
 		}
+
+		//cast from nose to find asteroids
+		if(this.partType.behaviors.indexOf("scan") >= 0) {
+			var start = {x: this.body.position.x, y: this.body.position.y};
+			var end = Vector.create(0,5);
+			end = Vector.rotate(end, -this.body.parent.angle);
+			var obstacleBodies = [];
+
+			//replace this later. Super inefficient
+			//maybe just keep track of the Bodies instead of Obstacles
+			Game.obstacles.forEach(function(obstacle){
+				obstacleBodies.push(obstacle.body);
+			});
+
+			//array of all collisions
+			var cols = Matter.Query.ray(
+				obstacleBodies,
+				start,
+				end,
+				5
+			);
+
+			cols.forEach(function(col){
+				//this doesn't quite work yet
+				console.log("hit");
+				Particle.makeParticle(
+					start.x,
+					start.y,
+					Math.random(),
+					Math.random(),
+					100, 255, 40,
+					5, 9
+				);
+			});
+		}
 	}
 }

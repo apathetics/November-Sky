@@ -1,38 +1,39 @@
 var Sleeping = Matter.Sleeping;
 
 class GameObject{
-  constructor(body, color){
-    this.body = body;
-    this.body.color = color;
-    this.body.isFloating = true;
-    // console.log(this.body.color);
-  }
 
-  destroy(){
-    World.remove(Game.engine.world, this.body);
-    this.body = null;
-  }
+	constructor(body, color){
+		this.body = body;
+		this.body.color = color;
+		this.body.isFloating = true;
+	}
 
-  add(){
-    // console.log(this.body.position);
-    World.add(Game.engine.world, this.body);
-  }
+	destroy(){
+		World.remove(Game.engine.world, this.body);
+		if(Game.obstacleBodies === Array)
+			Game.obstacleBodies.splice(Game.obstacleBodies.indexOf(this.body), 1);
+		this.body = null;
+	}
+
+	add(){
+		World.add(Game.engine.world, this.body);
+		if(Game.obstacleBodies === Array)
+			Game.obstacleBodies.push(this.body);
+	}
 }
 
 class Obstacle extends GameObject{
-  constructor(body, color){
-    super(body, color);
-    // console.log(this.body.isFloating);
-    this.body.isSensor = false;
-    this.add();
-  }
-
+	constructor(body, color){
+		super(body, color);
+		this.body.isSensor = false;
+		this.add();
+	}
 }
 
 class PowerUp extends GameObject{
-  constructor(body, color){
-    super(body, color);
-    this.body.isSensor = true;
-    this.add();
-  }
+	constructor(body, color){
+		super(body, color);
+		this.body.isSensor = true;
+		this.add();
+	}
 }
