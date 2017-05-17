@@ -44,11 +44,8 @@ class Rocket {
 				return;
 			if (part.partType.behaviors.indexOf("thrust") >= 0) {
 				part.thrust = Math.min(100, Math.max(0, that.controls.thrust)) / 100;
-				part.gimbal = Math.min(1, Math.max(-1, that.controls.gimbal));
 			}
-			if (part.partType.behaviors.indexOf("scan") >= 0){
-				part.gimbal = Math.min(1, Math.max(-1, that.controls.gimbal));
-			}
+			part.gimbal = Math.min(1, Math.max(-1, that.controls.gimbal));
 		});
 		this.partContainer.forEach(function(part){
 			part.update(dTime);

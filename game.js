@@ -22,7 +22,7 @@ class Game {
 		Game.SIDE_LENGTH = 25;
 		Game.wallRadius = 500;
 		Game.wallHeight = 5000;
-		Game.NUM_ASTEROIDS = 50;
+		Game.NUM_ASTEROIDS = 40;
 		Game.input = {
 			keys: []
 		};
@@ -107,23 +107,36 @@ class Game {
 
 	static updateObstacles(){
 		var playerPos = Game.rocket.mainBody.position;
-		Game.obstacles.forEach(function(obj) {
+		Game.obstacles.forEach(function(obj, index) {
 			if(Math.abs(obj.body.position.y - playerPos.y) > 2 * Display.height ||
-				obj.body.position.x - playerPos.x > 2 * Display.width)
+				obj.body.position.x - playerPos.x > 1.5 * Display.width)
 			{
 				obj.destroy();
-				Game.obstacles.splice(Game.obstacles.indexOf(obj), 1);
+				Game.obstacleBodies.splice(Game.obstacleBodies.indexOf(obj.body), 1);
+				Game.obstacles.splice(index, 1);
 			}
 		})
+		this.fillObstacles();
+	}
+
+	static fillObstacles(){
+		var playerPos = Game.rocket.mainBody.position;
 		while(Game.obstacles.length < Game.NUM_ASTEROIDS){
-      		//between -width to width plus a buffer
-      		var tempX = playerPos.x - Display.width + (Math.random() * 2.5 * Display.width);
-      		//between y-500 and y-(500+height)
-      		var tempY = playerPos.y - 500 - (Math.random() * Display.height);
-      		//between 25 and 50
+      		//x between -width to width
+      		var tempX = playerPos.x - (2 * Display.width) + (Math.random() * 4 * Display.width);
+      		//y between height and height*2
+      		var tempY = playerPos.y - Display.height - (Math.random() * 4 * Display.height);
+      		//radius between 25 and 50
       		var tempR = 25 + (Math.random() * 25);
-      		var newCircle = new Obstacle(Bodies.circle(tempX,tempY,tempR), Game.white);
-      		Body.setDensity(newCircle, .002); //set density to 2* default
+
+      		var circleBody = Bodies.circle(tempX,tempY,tempR);
+      		var newCircle = new Obstacle(circleBody, Game.white);
+
+      		Body.setDensity(circleBody, .002); //set density to 2 default
+      		var vel = { x: Math.random() * 20 - 10, y: Math.random() * 20 - 10 };
+      		Body.setVelocity(circleBody, vel);
+
+      		Game.obstacleBodies.push(circleBody);
       		Game.obstacles.push(newCircle);
   		}
 	}
