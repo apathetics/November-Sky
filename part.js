@@ -52,19 +52,18 @@ class Part {
 
 		//cast from nose to find asteroids
 		if(this.partType.behaviors.indexOf("scan") >= 0) {
-			var start = {x: this.body.position.x, y: this.body.position.y};
-			var end = { x: start.x, y: start.y + 5 };
-			//this angle isn't right
-			end = Vector.rotate(end, this.body.parent.angle);
+			var start = Game.rocket.mainBody.position;
+			var end = { x: start.x,
+				y: start.y + 5 };
 
 			/*Display.drawRay = new PIXI.Graphics();
 			Display.stage.addChild(Display.drawRay);
-			Display.drawRay.position.set(start.x, start.y);
+			Display.drawRay.position.set(0, 0);
 
 			Display.drawRay.lineStyle(5, 0xffffff)
-			       .moveTo(0, 0)
-			       .lineTo(end.x - start.x, end.y - start.y);
-			console.log(this.body.parent.angle);*/
+			       .moveTo(start.x, start.y)
+			       .lineTo(end.x, end.y);
+			//console.log(this.body.parent.angle);*/
 
 			//array of all collisions
 			var cols = Matter.Query.ray(
